@@ -1,3 +1,4 @@
-import { CellGrid } from './cell-grid';
+import { FlexGrid } from './flex-grid';
+import { ResponsiveGrid } from './responsive-grid';
 
-export { CellGrid };
+export { FlexGrid, ResponsiveGrid };

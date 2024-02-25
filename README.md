@@ -1,4 +1,10 @@
-# react-native-flexible-grid
+# React Native Flexible Grid
+
+[![CI](https://github.com/iNerdStack/react-native-flexible-grid/actions/workflows/ci.yml/badge.svg)](https://github.com/iNerdStack/react-native-flexible-grid/actions/workflows/ci.yml)
+
+
+
+[![MIT License][license-badge]][license]
 
 A flexible grid component inspired by CSS Grid for React Native
 
@@ -47,11 +53,11 @@ import { CellGrid } from 'react-native-flexible-grid';
     <View style={styles.container}>
       <CellGrid
         maxWidthRatio={4}
-        cellSize={80}
+        tileSize={80}
         data={data}
         viewportBuffer={200}
         renderItem={renderItem}
-        enableVirtualization={true}
+        virtualization={true}
       />
     </View>
   );

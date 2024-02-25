@@ -1,76 +1,113 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  BackHandler,
+  StatusBar,
+} from 'react-native';
+import { SafeAreaView } from 'react-native';
+import InstagramExploreExample from './InstagramExploreExample';
+import PinterestExample from './PinterestHomeExample';
+import GridBoardExamplePage from './GridBoardExample';
 
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { CellGrid } from 'react-native-flexible-grid';
+type ScreenName =
+  | 'Landing'
+  | 'FlexGrid'
+  | 'InstagramExplore'
+  | 'Pinterest'
+  | 'GridBoardExample';
 
-export default function App() {
-  const data = React.useMemo(() => {
-    const items = [];
+interface LandingProps {
+  onNavigate: (screenName: ScreenName) => void;
+}
 
-    for (let i = 0; i < 200; i++) {
-      items.push({
-        widthRatio: 1,
-        heightRatio: 1,
-        text: (i + 1).toString(),
-      });
-    }
-
-    return items;
-  }, []);
-
-  const renderItem = (item: any, _: number) => {
-    return (
+const Landing = ({ onNavigate }: LandingProps) => {
+  return (
+    <View style={styles.container}>
       <TouchableOpacity
-        style={styles.boxContainer}
-        onPress={() => {
-          console.log(item.text, 'pressed');
-        }}
+        onPress={() => onNavigate('InstagramExplore')}
+        style={styles.button}
       >
-        <View style={styles.box}>
-          <Text style={styles.text}>{item.text}</Text>
-        </View>
+        <Text style={styles.text}>Instagram Explore Example </Text>
       </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={() => onNavigate('Pinterest')}
+        style={styles.button}
+      >
+        <Text style={styles.text}>Pinterest Example </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={() => onNavigate('GridBoardExample')}
+        style={styles.button}
+      >
+        <Text style={styles.text}>Grid Board Example </Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+const App = () => {
+  const [currentScreen, setCurrentScreen] = useState('Landing');
+
+  //Back handler
+  useEffect(() => {
+    const backAction = () => {
+      if (currentScreen !== 'Landing') {
+        navigate('Landing');
+        return true;
+      }
+      return false;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction
     );
+
+    return () => backHandler.remove();
+  }, [currentScreen]);
+
+  const navigate = (screenName: ScreenName) => {
+    setCurrentScreen(screenName);
   };
 
   return (
-    <View style={styles.container}>
-      <CellGrid
-        maxWidthRatio={100}
-        cellSize={80}
-        data={data}
-        viewportBuffer={1000}
-        renderItem={renderItem}
-        enableVirtualization={true}
-      />
-    </View>
+    <SafeAreaView style={styles.safeAreaContainer}>
+      {currentScreen === 'Landing' && <Landing onNavigate={navigate} />}
+      {currentScreen === 'InstagramExplore' && <InstagramExploreExample />}
+      {currentScreen === 'Pinterest' && <PinterestExample />}
+      {currentScreen === 'GridBoardExample' && <GridBoardExamplePage />}
+    </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
+  safeAreaContainer: {
+    flex: 1,
+    marginTop: StatusBar.currentHeight,
+    backgroundColor: 'white',
+  },
   container: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
-  },
-  boxContainer: {
+    alignItems: 'center',
     backgroundColor: 'white',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    height: '100%',
-    padding: 2,
   },
-  box: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'green',
-    justifyContent: 'center',
-    alignItems: 'center',
+  button: {
+    backgroundColor: '#007bff',
+    padding: 20,
+    margin: 20,
+    borderRadius: 10,
+    width: '70%',
   },
   text: {
     color: 'white',
     fontSize: 20,
-    backgroundColor: 'green',
   },
 });
+
+export default App;
