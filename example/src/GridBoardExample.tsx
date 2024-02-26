@@ -7,7 +7,7 @@ import { FlexGrid } from 'react-native-flexible-grid';
 
 export default function GridBoardExamplePage() {
   //generate sample data
-  const data = React.useMemo(() => {
+  const data = () => {
     const items = [];
 
     for (let i = 0; i < 120; i++) {
@@ -36,7 +36,7 @@ export default function GridBoardExamplePage() {
     }
 
     return items;
-  }, []);
+  };
 
   const renderItem = (item: any, _: number) => {
     return (
@@ -157,7 +157,7 @@ export default function GridBoardExamplePage() {
           <FlexGrid
             maxColumnRatioUnits={60}
             itemSizeUnit={60}
-            data={data}
+            data={data()}
             virtualizedBufferFactor={2}
             renderItem={renderItem}
             virtualization={true}

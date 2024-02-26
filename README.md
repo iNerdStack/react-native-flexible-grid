@@ -39,7 +39,7 @@
        <td><img src="https://raw.githubusercontent.com/iNerdStack/react-native-flexible-grid/main/example/assets/gifs/gridboard-overflow-example.gif" alt="Grid Board Example" width="403px" height="100%" /></td>
   </tr>
   <tr>
-    <td align="center"> <a href="https://github.com/iNerdStack/react-native-flexible-grid/blob/main/example/src/PinterestHomeExample.tsx">Grid Board Example </a> </td>
+    <td align="center"> <a href="https://github.com/iNerdStack/react-native-flexible-grid/blob/main/example/src/GridBoardExample.tsx">Grid Board Example </a> </td>
   </tr>
 </table>
 
@@ -201,8 +201,7 @@ export default function App() {
       <td><code>Number</code></td>
       <td><code>50</code></td>
            <td><code>true</code></td>
-      <td> Defines the base unit size for grid items. The actual displayed size of each item in the grid is calculated by multiplying this unit by the item's <code>widthRatio </code> and <code>
-      heightRatio</code> </td>
+      <td> Defines the base unit size for grid items. The actual displayed size of each item in the grid is calculated by multiplying this unit by the item's <code>widthRatio</code> and <code>heightRatio</code> </td>
     </tr>
       <tr>
       <td><code>virtualization</code></td>
