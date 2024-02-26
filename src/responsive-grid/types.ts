@@ -10,7 +10,7 @@ export interface FlexGridProps {
   virtualizedBufferFactor?: number;
   showScrollIndicator?: boolean;
   style?: StyleProp<ViewStyle>;
-  tileHeight?: number;
+  itemUnitHeight?: number;
 }
 
 export interface TileItem {

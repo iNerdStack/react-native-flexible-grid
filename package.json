@@ -34,10 +34,9 @@
     "react-native",
     "ios",
     "android",
-    "flexible-grid",
     "grid",
-    "grid-system",
-    "expo"
+    "grid-layout",
+    "masonry"
   ],
   "repository": {
     "type": "git",

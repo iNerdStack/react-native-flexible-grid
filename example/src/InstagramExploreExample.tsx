@@ -72,7 +72,6 @@ export default function InstagramExploreExample() {
         maxItemsPerColumn={3}
         data={repeatedData}
         renderItem={renderItem}
-        virtualization={true}
         showScrollIndicator={false}
         style={{
           padding: 5,

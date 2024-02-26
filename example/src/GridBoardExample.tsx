@@ -155,8 +155,8 @@ export default function GridBoardExamplePage() {
           </Text>
 
           <FlexGrid
-            maxWidthRatio={60}
-            tileSize={60}
+            maxColumnRatioUnits={60}
+            itemSizeUnit={60}
             data={data}
             virtualizedBufferFactor={2}
             renderItem={renderItem}

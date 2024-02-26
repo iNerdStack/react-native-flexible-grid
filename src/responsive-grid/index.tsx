@@ -16,7 +16,7 @@ export const ResponsiveGrid: React.FC<FlexGridProps> = ({
   virtualization = true,
   showScrollIndicator = true,
   style = {},
-  tileHeight,
+  itemUnitHeight,
 }) => {
   const [visibleItems, setVisibleItems] = useState<TileItem[]>([]);
   const throttleScrollTimeout = useRef<ReturnType<typeof setTimeout> | null>(
@@ -30,7 +30,12 @@ export const ResponsiveGrid: React.FC<FlexGridProps> = ({
 
   const { gridViewHeight, gridItems } = useMemo(
     () =>
-      calcResponsiveGrid(data, maxItemsPerColumn, containerWidth, tileHeight),
+      calcResponsiveGrid(
+        data,
+        maxItemsPerColumn,
+        containerWidth,
+        itemUnitHeight
+      ),
     [data, maxItemsPerColumn, containerWidth]
   );
 

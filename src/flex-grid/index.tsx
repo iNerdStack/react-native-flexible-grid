@@ -10,12 +10,12 @@ import { calcFlexGrid } from './calc-flex-grid';
 export const FlexGrid: React.FC<FlexGridProps> = ({
   data = [],
   virtualization = true,
-  maxWidthRatio = 1,
-  tileSize = 50,
+  maxColumnRatioUnits = 1,
+  itemSizeUnit = 50,
   scrollEventInterval = 200, // milliseconds
   virtualizedBufferFactor = 2,
   showScrollIndicator = true,
-  renderItem,
+  renderItem = () => null,
   style = {},
 }) => {
   const [visibleItems, setVisibleItems] = useState<FlexGridTile[]>([]);
@@ -33,8 +33,8 @@ export const FlexGrid: React.FC<FlexGridProps> = ({
   );
 
   const { totalHeight, totalWidth, gridItems } = useMemo(() => {
-    return calcFlexGrid(data, maxWidthRatio, tileSize);
-  }, [data, maxWidthRatio, tileSize]);
+    return calcFlexGrid(data, maxColumnRatioUnits, itemSizeUnit);
+  }, [data, maxColumnRatioUnits, itemSizeUnit]);
 
   const renderedList = virtualization ? visibleItems : gridItems;
 
@@ -51,8 +51,8 @@ export const FlexGrid: React.FC<FlexGridProps> = ({
     const visibleEndY = scrollPosition.current.y + containerHeight + bufferY;
 
     const vItems = gridItems.filter((item) => {
-      const itemRight = item.left + (item.widthRatio || 1) * tileSize;
-      const itemBottom = item.top + (item.heightRatio || 1) * tileSize;
+      const itemRight = item.left + (item.widthRatio || 1) * itemSizeUnit;
+      const itemBottom = item.top + (item.heightRatio || 1) * itemSizeUnit;
       return (
         item.left < visibleEndX &&
         itemRight > visibleStartX &&
@@ -109,13 +109,13 @@ export const FlexGrid: React.FC<FlexGridProps> = ({
   };
 
   useEffect(() => {
-    //recalculate visible items when tileSize or maxWidthRatio or data changes
+    //recalculate visible items when itemSizeUnit or maxColumnRatioUnits or data changes
     if (virtualization) {
       updateVisibleItems();
     }
   }, [
-    tileSize,
-    maxWidthRatio,
+    itemSizeUnit,
+    maxColumnRatioUnits,
     data,
     virtualization,
     containerHeight,
@@ -160,8 +160,8 @@ export const FlexGrid: React.FC<FlexGridProps> = ({
                   position: 'absolute',
                   top: item.top,
                   left: item.left,
-                  width: (item.widthRatio || 1) * tileSize,
-                  height: (item.heightRatio || 1) * tileSize,
+                  width: (item.widthRatio || 1) * itemSizeUnit,
+                  height: (item.heightRatio || 1) * itemSizeUnit,
                 }}
               >
                 {renderItem(item, index)}

@@ -2,9 +2,9 @@ import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 
 export interface FlexGridProps {
-  maxWidthRatio: number;
+  maxColumnRatioUnits: number;
   virtualization?: boolean;
-  tileSize: number;
+  itemSizeUnit: number;
   renderItem: (item: FlexGridTile, index: number) => ReactNode;
   data: FlexGridTile[];
   virtualizedBufferFactor?: number;

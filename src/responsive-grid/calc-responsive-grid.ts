@@ -4,24 +4,24 @@ export const calcResponsiveGrid = (
   data: TileItem[],
   maxItemsPerColumn: number,
   containerWidth: number,
-  tileHeight?: number
+  itemUnitHeight?: number
 ): {
   gridItems: GridItem[];
   gridViewHeight: number;
 } => {
   const gridItems: GridItem[] = [];
-  const tileSize = containerWidth / maxItemsPerColumn; // Determine TileSize based on container width and max number of columns
+  const itemSizeUnit = containerWidth / maxItemsPerColumn; // Determine TileSize based on container width and max number of columns
   let columnHeights: number[] = new Array(maxItemsPerColumn).fill(0); // Track the height of each column end.
 
   data.forEach((item) => {
     const widthRatio = item.widthRatio || 1;
     const heightRatio = item.heightRatio || 1;
 
-    const itemWidth = widthRatio * tileSize;
+    const itemWidth = widthRatio * itemSizeUnit;
 
-    const itemHeight = tileHeight
-      ? tileHeight * heightRatio
-      : heightRatio * tileSize; // Use tileHeight if provided, else fallback to tileSize
+    const itemHeight = itemUnitHeight
+      ? itemUnitHeight * heightRatio
+      : heightRatio * itemSizeUnit; // Use itemUnitHeight if provided, else fallback to itemSizeUnit
 
     // Find the column where the item should be placed.
     let columnIndex = findColumnForItem(
@@ -32,7 +32,7 @@ export const calcResponsiveGrid = (
 
     // Calculate item's top and left positions.
     const top = columnHeights[columnIndex]!;
-    const left = columnIndex * tileSize;
+    const left = columnIndex * itemSizeUnit;
 
     // Place the item.
     gridItems.push({

@@ -63,7 +63,7 @@ export default function PinterestExample() {
         maxItemsPerColumn={2}
         data={repeatedData}
         renderItem={renderItem}
-        tileHeight={80} // set tileHeight to control uneven tiles
+        itemUnitHeight={80} // set itemUnitHeight to control uneven tiles
         style={{
           padding: 5,
         }}
