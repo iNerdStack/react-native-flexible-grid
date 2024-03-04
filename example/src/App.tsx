@@ -11,12 +11,13 @@ import { SafeAreaView } from 'react-native';
 import InstagramExploreExample from './InstagramExploreExample';
 import PinterestExample from './PinterestHomeExample';
 import GridBoardExamplePage from './GridBoardExample';
+import TileGrid from './TileGrid';
 
 type ScreenName =
   | 'Landing'
-  | 'FlexGrid'
   | 'InstagramExplore'
   | 'Pinterest'
+  | 'TileGrid'
   | 'GridBoardExample';
 
 interface LandingProps {
@@ -26,6 +27,13 @@ interface LandingProps {
 const Landing = ({ onNavigate }: LandingProps) => {
   return (
     <View style={styles.container}>
+      <TouchableOpacity
+        onPress={() => onNavigate('TileGrid')}
+        style={styles.button}
+      >
+        <Text style={styles.text}>TileGrid Example </Text>
+      </TouchableOpacity>
+
       <TouchableOpacity
         onPress={() => onNavigate('InstagramExplore')}
         style={styles.button}
@@ -78,6 +86,7 @@ const App = () => {
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
       {currentScreen === 'Landing' && <Landing onNavigate={navigate} />}
+      {currentScreen === 'TileGrid' && <TileGrid />}
       {currentScreen === 'InstagramExplore' && <InstagramExploreExample />}
       {currentScreen === 'Pinterest' && <PinterestExample />}
       {currentScreen === 'GridBoardExample' && <GridBoardExamplePage />}
