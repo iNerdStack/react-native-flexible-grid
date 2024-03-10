@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 
-export interface FlexGridProps {
+export interface ResponsiveGridProps {
   renderItem: (item: TileItem, index: number) => ReactNode;
   data: TileItem[];
   maxItemsPerColumn: number;
@@ -10,6 +10,7 @@ export interface FlexGridProps {
   virtualizedBufferFactor?: number;
   showScrollIndicator?: boolean;
   style?: StyleProp<ViewStyle>;
+  itemContainerStyle?: StyleProp<ViewStyle>;
   itemUnitHeight?: number;
 }
 

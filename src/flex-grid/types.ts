@@ -11,6 +11,7 @@ export interface FlexGridProps {
   scrollEventInterval?: number;
   showScrollIndicator?: boolean;
   style?: StyleProp<ViewStyle>;
+  itemContainerStyle?: StyleProp<ViewStyle>;
 }
 
 export interface FlexGridTile {

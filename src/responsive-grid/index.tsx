@@ -3,11 +3,11 @@
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { ScrollView, View } from 'react-native';
-import type { FlexGridProps, TileItem } from './types';
+import type { ResponsiveGridProps, TileItem } from './types';
 import { calcResponsiveGrid } from './calc-responsive-grid';
 import type { NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
 
-export const ResponsiveGrid: React.FC<FlexGridProps> = ({
+export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
   data = [],
   maxItemsPerColumn = 3,
   virtualizedBufferFactor = 5,
@@ -16,6 +16,7 @@ export const ResponsiveGrid: React.FC<FlexGridProps> = ({
   virtualization = true,
   showScrollIndicator = true,
   style = {},
+  itemContainerStyle = {},
   itemUnitHeight,
 }) => {
   const [visibleItems, setVisibleItems] = useState<TileItem[]>([]);
@@ -115,13 +116,16 @@ export const ResponsiveGrid: React.FC<FlexGridProps> = ({
           {renderedItems.map((item, index) => (
             <View
               key={index}
-              style={{
-                position: 'absolute',
-                top: item.top,
-                left: item.left,
-                width: item.width,
-                height: item.height,
-              }}
+              style={[
+                {
+                  position: 'absolute',
+                  top: item.top,
+                  left: item.left,
+                  width: item.width,
+                  height: item.height,
+                },
+                itemContainerStyle,
+              ]}
             >
               {renderItem(item, index)}
             </View>

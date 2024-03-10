@@ -17,6 +17,7 @@ export const FlexGrid: React.FC<FlexGridProps> = ({
   showScrollIndicator = true,
   renderItem = () => null,
   style = {},
+  itemContainerStyle = {},
 }) => {
   const [visibleItems, setVisibleItems] = useState<FlexGridTile[]>([]);
 
@@ -150,19 +151,21 @@ export const FlexGrid: React.FC<FlexGridProps> = ({
             style={{
               height: totalHeight,
               width: totalWidth,
-              position: 'relative',
             }}
           >
             {renderedList.map((item, index) => (
               <View
                 key={index}
-                style={{
-                  position: 'absolute',
-                  top: item.top,
-                  left: item.left,
-                  width: (item.widthRatio || 1) * itemSizeUnit,
-                  height: (item.heightRatio || 1) * itemSizeUnit,
-                }}
+                style={[
+                  {
+                    position: 'absolute',
+                    top: item.top,
+                    left: item.left,
+                    width: (item.widthRatio || 1) * itemSizeUnit,
+                    height: (item.heightRatio || 1) * itemSizeUnit,
+                  },
+                  itemContainerStyle,
+                ]}
               >
                 {renderItem(item, index)}
               </View>

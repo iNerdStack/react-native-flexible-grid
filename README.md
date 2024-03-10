@@ -77,17 +77,20 @@ import { FlexGrid } from 'react-native-flexible-grid';
 
 export default function App() {
   const data = [
-    { imageUrl: 'https://picsum.photos/200/300?random=1', widthRatio: 1, heightRatio: 1 },
-    { imageUrl: 'https://picsum.photos/200/300?random=2', widthRatio: 2, heightRatio: 1 },
-    { imageUrl: 'https://picsum.photos/200/300?random=3', widthRatio: 2, heightRatio: 1 },
+    { imageUrl: 'https://picsum.photos/200/300?random=1', widthRatio: 1, heightRatio: 1, text: "Item 1" },
+    { imageUrl: 'https://picsum.photos/200/300?random=2', widthRatio: 2, heightRatio: 1, text: "Item 2" },
+    { imageUrl: 'https://picsum.photos/200/300?random=3', widthRatio: 2, heightRatio: 1, text: "Item 3" },
   ];
 
   const renderItem = (item, index) => (
-    <TouchableOpacity style={styles.boxContainer} onPress={() => console.log(`Item ${item.text} pressed`)}>
-      <View style={styles.box}>
+      <View style={styles.boxContainer}>
+        <Image
+          source={{ uri: item.imageUrl }}
+          style={styles.box}
+          resizeMode="cover"
+        />
         <Text style={styles.text}>{item.text}</Text>
       </View>
-    </TouchableOpacity>
   );
 
   return (
@@ -130,17 +133,20 @@ import { ResponsiveGrid } from 'react-native-flexible-grid';
 
 export default function App() {
   const data = [
-    { imageUrl: 'https://picsum.photos/200/300?random=1', widthRatio: 1, heightRatio: 1 },
-    { imageUrl: 'https://picsum.photos/200/300?random=2', widthRatio: 2, heightRatio: 1 },
-    { imageUrl: 'https://picsum.photos/200/300?random=3', widthRatio: 2, heightRatio: 1 },
+    { imageUrl: 'https://picsum.photos/200/300?random=1', widthRatio: 1, heightRatio: 1, text: "Item 1" },
+    { imageUrl: 'https://picsum.photos/200/300?random=2', widthRatio: 2, heightRatio: 1, text: "Item 2" },
+    { imageUrl: 'https://picsum.photos/200/300?random=3', widthRatio: 2, heightRatio: 1, text: "Item 3" },
   ];
 
   const renderItem = (item, index) => (
-    <TouchableOpacity style={styles.boxContainer} onPress={() => console.log(`Item ${item.text} pressed`)}>
-      <View style={styles.box}>
+  <View style={styles.boxContainer}>
+        <Image
+          source={{ uri: item.imageUrl }}
+          style={styles.box}
+          resizeMode="cover"
+        />
         <Text style={styles.text}>{item.text}</Text>
       </View>
-    </TouchableOpacity>
   );
 
   return (
@@ -254,7 +260,14 @@ A lower value results in more frequent updates, offering smoother visual updates
       <td><code>ViewStyle</code></td>
       <td><code>{}</code></td>
            <td><code>false</code></td>
-      <td> Accepts a React Native ViewStyle object. This applied to the outermost container of the component, can be used to set a fixed width, height, etc </td>
+      <td> Accepts a React Native <code>ViewStyle</code> object. This property applies to the outermost container of the component and can be used to set various styling aspects such as fixed width, height, background color, margin, padding, and more. </td>
+    </tr>
+      <tr>
+      <td><code>itemContainerStyle</code></td>
+      <td><code>ViewStyle</code></td>
+      <td><code>{}</code></td>
+           <td><code>false</code></td>
+      <td> Accepts a React Native <code>ViewStyle</code> object. This applies to the container of each item in the grid layout and can be used to create a gap between each grid item with padding, apply background color, etc. </td>
     </tr>
   </tbody>
 </table>
@@ -350,7 +363,14 @@ A lower value results in more frequent updates, offering smoother visual updates
       <td><code>ViewStyle</code></td>
       <td><code>{}</code></td>
            <td><code>false</code></td>
-      <td> Accepts a React Native ViewStyle object. This applied to the outermost container of the component, can be used to set a fixed width, height, etc </td>
+      <td> Accepts a React Native <code>ViewStyle</code> object. This property applies to the outermost container of the component and can be used to set various styling aspects such as fixed width, height, background color, margin, padding, and more. </td>
+    </tr>
+      <tr>
+      <td><code>itemContainerStyle</code></td>
+      <td><code>ViewStyle</code></td>
+      <td><code>{}</code></td>
+           <td><code>false</code></td>
+      <td> Accepts a React Native <code>ViewStyle</code> object. This applies to the container of each item in the grid layout and can be used to create a gap between each grid item with padding, apply background color, etc. </td>
     </tr>
   </tbody>
 </table>

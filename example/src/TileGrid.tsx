@@ -32,6 +32,39 @@ export default function TileGrid() {
     },
   ];
 
+  const renderItem = (item: any, _: number) => {
+    return (
+      <TouchableOpacity
+        style={{
+          flex: 1,
+        }}
+        onPress={() => {
+          console.log(item.text, 'pressed');
+        }}
+      >
+        <View
+          style={{
+            width: '100%',
+            height: '100%',
+            backgroundColor: '#FFA502',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 5,
+          }}
+        >
+          <Text
+            style={{
+              color: 'white',
+              fontSize: 20,
+            }}
+          >
+            {item.text}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <View
       style={{
@@ -41,41 +74,13 @@ export default function TileGrid() {
       <ResponsiveGrid
         maxItemsPerColumn={4}
         data={data}
-        renderItem={(item, _) => (
-          <TouchableOpacity
-            style={{
-              backgroundColor: 'white',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: '100%',
-              height: '100%',
-              padding: 2,
-            }}
-            onPress={() => {
-              console.log(item.text, 'pressed');
-            }}
-          >
-            <View
-              style={{
-                width: '100%',
-                height: '100%',
-                backgroundColor: '#FFA502',
-                justifyContent: 'center',
-                alignItems: 'center',
-                borderRadius: 5,
-              }}
-            >
-              <Text
-                style={{
-                  color: 'white',
-                  fontSize: 20,
-                }}
-              >
-                {item.text}
-              </Text>
-            </View>
-          </TouchableOpacity>
-        )}
+        itemContainerStyle={{
+          padding: 2,
+        }}
+        renderItem={renderItem}
+        style={{
+          backgroundColor: 'white',
+        }}
       />
     </View>
   );

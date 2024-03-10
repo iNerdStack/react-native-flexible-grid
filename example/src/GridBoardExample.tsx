@@ -43,7 +43,6 @@ export default function GridBoardExamplePage() {
       <View
         style={{
           flex: 1,
-          padding: 10,
         }}
       >
         <View style={styles.card}>
@@ -164,6 +163,9 @@ export default function GridBoardExamplePage() {
             showScrollIndicator={false}
             style={{
               flex: 1,
+            }}
+            itemContainerStyle={{
+              padding: 10,
             }}
           />
 
