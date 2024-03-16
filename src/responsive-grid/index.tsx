@@ -6,6 +6,7 @@ import { ScrollView, View } from 'react-native';
 import type { ResponsiveGridProps, TileItem } from './types';
 import { calcResponsiveGrid } from './calc-responsive-grid';
 import type { NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
+import useThrottle from '../hooks/use-throttle';
 
 export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
   data = [],
@@ -20,12 +21,8 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
   itemUnitHeight,
 }) => {
   const [visibleItems, setVisibleItems] = useState<TileItem[]>([]);
-  const throttleScrollTimeout = useRef<ReturnType<typeof setTimeout> | null>(
-    null
-  );
 
-  const [containerWidth, setContainerWidth] = useState(0);
-  const [containerHeight, setContainerHeight] = useState(0);
+  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
 
   const scrollYPosition = useRef<number>(0);
 
@@ -34,10 +31,10 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
       calcResponsiveGrid(
         data,
         maxItemsPerColumn,
-        containerWidth,
+        containerSize.width,
         itemUnitHeight
       ),
-    [data, maxItemsPerColumn, containerWidth]
+    [data, maxItemsPerColumn, containerSize]
   );
 
   const renderedItems = virtualization ? visibleItems : gridItems;
@@ -46,11 +43,11 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
     if (!virtualization) return;
 
     // Buffer to add outside visible range
-    const buffer = containerHeight * virtualizedBufferFactor;
+    const buffer = containerSize.height * virtualizedBufferFactor;
 
     // Define the range of items that are visible based on scroll position
     const visibleStart = Math.max(0, scrollYPosition.current - buffer);
-    const visibleEnd = scrollYPosition.current + containerHeight + buffer;
+    const visibleEnd = scrollYPosition.current + containerSize.height + buffer;
 
     const vItems = gridItems.filter((item: TileItem) => {
       const itemBottom = item.top + item.height;
@@ -63,39 +60,33 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
     return vItems;
   };
 
+  const throttledUpdateVisibleItems = useThrottle(
+    updateVisibleItems,
+    scrollEventInterval
+  );
+
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    // If virtualization is disabled, return
     if (!virtualization) return;
 
     const currentScrollY = event.nativeEvent.contentOffset.y;
 
     scrollYPosition.current = currentScrollY;
 
-    // Throttling logic
-    if (throttleScrollTimeout.current !== null) {
-      return;
-    }
-
-    throttleScrollTimeout.current = setTimeout(() => {
-      updateVisibleItems();
-
-      throttleScrollTimeout.current = null;
-    }, scrollEventInterval);
+    throttledUpdateVisibleItems();
   };
 
   useEffect(() => {
     if (virtualization) {
       updateVisibleItems();
     }
-  }, [gridItems, containerHeight, containerWidth, virtualization]);
+  }, [gridItems, containerSize, virtualization]);
 
   return (
     <View
       style={[{ flexGrow: 1 }, style]}
       onLayout={(event) => {
         const { width, height } = event.nativeEvent.layout;
-        setContainerWidth(width);
-        setContainerHeight(height);
+        setContainerSize({ width, height });
       }}
     >
       <ScrollView
@@ -103,14 +94,14 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
         scrollEventThrottle={32}
         contentContainerStyle={{
           height: gridViewHeight,
-          width: containerWidth,
+          width: containerSize.width,
         }}
         showsVerticalScrollIndicator={showScrollIndicator}
       >
         <View
           style={{
             height: gridViewHeight,
-            width: containerWidth,
+            width: containerSize.width,
           }}
         >
           {renderedItems.map((item, index) => (

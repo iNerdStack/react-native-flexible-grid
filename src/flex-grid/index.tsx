@@ -6,6 +6,7 @@ import type { NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
 import type { FlexGridProps, FlexGridTile } from './types';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { calcFlexGrid } from './calc-flex-grid';
+import useThrottle from '../hooks/use-throttle';
 
 export const FlexGrid: React.FC<FlexGridProps> = ({
   data = [],
@@ -21,17 +22,12 @@ export const FlexGrid: React.FC<FlexGridProps> = ({
 }) => {
   const [visibleItems, setVisibleItems] = useState<FlexGridTile[]>([]);
 
-  const [containerWidth, setContainerWidth] = useState(0);
-  const [containerHeight, setContainerHeight] = useState(0);
+  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
 
   const scrollPosition = useRef<{
     x: number;
     y: number;
   }>({ x: 0, y: 0 });
-
-  const throttleScrollTimeout = useRef<ReturnType<typeof setTimeout> | null>(
-    null
-  );
 
   const { totalHeight, totalWidth, gridItems } = useMemo(() => {
     return calcFlexGrid(data, maxColumnRatioUnits, itemSizeUnit);
@@ -42,14 +38,16 @@ export const FlexGrid: React.FC<FlexGridProps> = ({
   const updateVisibleItems = () => {
     if (!virtualization) return;
 
-    const bufferX = containerWidth * virtualizedBufferFactor;
-    const bufferY = containerHeight * virtualizedBufferFactor;
+    const bufferX = containerSize.width * virtualizedBufferFactor;
+    const bufferY = containerSize.height * virtualizedBufferFactor;
 
     const visibleStartX = Math.max(0, scrollPosition.current.x - bufferX);
-    const visibleEndX = scrollPosition.current.x + containerWidth + bufferX;
+    const visibleEndX =
+      scrollPosition.current.x + containerSize.width + bufferX;
 
     const visibleStartY = Math.max(0, scrollPosition.current.y - bufferY);
-    const visibleEndY = scrollPosition.current.y + containerHeight + bufferY;
+    const visibleEndY =
+      scrollPosition.current.y + containerSize.height + bufferY;
 
     const vItems = gridItems.filter((item) => {
       const itemRight = item.left + (item.widthRatio || 1) * itemSizeUnit;
@@ -65,6 +63,11 @@ export const FlexGrid: React.FC<FlexGridProps> = ({
     setVisibleItems(vItems);
   };
 
+  const throttledUpdateVisibleItems = useThrottle(
+    updateVisibleItems,
+    scrollEventInterval
+  );
+
   const onHorizontalScroll = (
     event: NativeSyntheticEvent<NativeScrollEvent>
   ) => {
@@ -77,15 +80,7 @@ export const FlexGrid: React.FC<FlexGridProps> = ({
       x: nativeEvent.contentOffset.x,
     };
 
-    if (throttleScrollTimeout.current !== null) {
-      return;
-    }
-
-    throttleScrollTimeout.current = setTimeout(() => {
-      updateVisibleItems();
-
-      throttleScrollTimeout.current = null;
-    }, scrollEventInterval);
+    throttledUpdateVisibleItems();
   };
 
   const onVerticalScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -98,15 +93,7 @@ export const FlexGrid: React.FC<FlexGridProps> = ({
       y: nativeEvent.contentOffset.y,
     };
 
-    if (throttleScrollTimeout.current !== null) {
-      return;
-    }
-
-    throttleScrollTimeout.current = setTimeout(() => {
-      updateVisibleItems();
-
-      throttleScrollTimeout.current = null;
-    }, scrollEventInterval);
+    throttledUpdateVisibleItems();
   };
 
   useEffect(() => {
@@ -114,14 +101,7 @@ export const FlexGrid: React.FC<FlexGridProps> = ({
     if (virtualization) {
       updateVisibleItems();
     }
-  }, [
-    itemSizeUnit,
-    maxColumnRatioUnits,
-    data,
-    virtualization,
-    containerHeight,
-    containerWidth,
-  ]);
+  }, [itemSizeUnit, maxColumnRatioUnits, data, virtualization, containerSize]);
 
   if (!renderedList) {
     return null;
@@ -132,8 +112,7 @@ export const FlexGrid: React.FC<FlexGridProps> = ({
       style={[{ flexGrow: 1 }, style]}
       onLayout={(event) => {
         const { width, height } = event.nativeEvent.layout;
-        setContainerWidth(width);
-        setContainerHeight(height);
+        setContainerSize({ width, height });
       }}
     >
       <ScrollView

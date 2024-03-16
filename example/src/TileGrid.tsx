@@ -32,14 +32,16 @@ export default function TileGrid() {
     },
   ];
 
-  const renderItem = (item: any, _: number) => {
+  const repeatedData = Array(50).fill(data).flat();
+
+  const renderItem = (_: any, index: number) => {
     return (
       <TouchableOpacity
         style={{
           flex: 1,
         }}
         onPress={() => {
-          console.log(item.text, 'pressed');
+          console.log(index + 1, 'pressed');
         }}
       >
         <View
@@ -58,7 +60,7 @@ export default function TileGrid() {
               fontSize: 20,
             }}
           >
-            {item.text}
+            {index + 1}
           </Text>
         </View>
       </TouchableOpacity>
@@ -73,7 +75,7 @@ export default function TileGrid() {
     >
       <ResponsiveGrid
         maxItemsPerColumn={4}
-        data={data}
+        data={repeatedData}
         itemContainerStyle={{
           padding: 2,
         }}
