@@ -19,10 +19,15 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
   style = {},
   itemContainerStyle = {},
   itemUnitHeight,
+  onEndReached,
+  onEndReachedThreshold = 0.5, // default to 50% of the container height
+  keyExtractor = (_, index) => String(index), // default to item index if no keyExtractor is provided
 }) => {
   const [visibleItems, setVisibleItems] = useState<TileItem[]>([]);
 
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
+
+  const onEndReachedCalled = useRef<boolean>(false);
 
   const scrollYPosition = useRef<number>(0);
 
@@ -66,19 +71,41 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
   );
 
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    if (!virtualization) return;
-
     const currentScrollY = event.nativeEvent.contentOffset.y;
-
     scrollYPosition.current = currentScrollY;
 
-    throttledUpdateVisibleItems();
+    // Calculate the position to check against the threshold
+    const contentHeight = gridViewHeight;
+    const scrollViewHeight = containerSize.height;
+    const threshold = onEndReachedThreshold * scrollViewHeight;
+
+    // Check if we've reached the threshold for calling onEndReached
+    if (
+      !onEndReachedCalled.current &&
+      currentScrollY + scrollViewHeight + threshold >= contentHeight
+    ) {
+      onEndReachedCalled.current = true; // Marked as called to prevent subsequent calls
+      onEndReached?.(); // call the onEndReached function if it exists
+    }
+
+    // Reset the flag when scrolled away from the bottom
+    if (currentScrollY + scrollViewHeight + threshold * 2 < contentHeight) {
+      onEndReachedCalled.current = false;
+    }
+
+    // Update visible items for virtualization
+    if (virtualization) {
+      throttledUpdateVisibleItems();
+    }
   };
 
   useEffect(() => {
     if (virtualization) {
       updateVisibleItems();
     }
+
+    // Reset onEndReachedCalled to false when data changes, allowing onEndReached to be called again
+    onEndReachedCalled.current = false;
   }, [gridItems, containerSize, virtualization]);
 
   return (
@@ -106,7 +133,7 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
         >
           {renderedItems.map((item, index) => (
             <View
-              key={index}
+              key={keyExtractor(item, index)}
               style={[
                 {
                   position: 'absolute',
@@ -118,7 +145,7 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
                 itemContainerStyle,
               ]}
             >
-              {renderItem(item, index)}
+              {renderItem({ item, index })}
             </View>
           ))}
         </View>

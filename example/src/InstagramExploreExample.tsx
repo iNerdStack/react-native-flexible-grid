@@ -1,55 +1,75 @@
 /* eslint-disable react-native/no-inline-styles */
 import * as React from 'react';
 
-import { StyleSheet, View, Text, Image } from 'react-native';
+import { StyleSheet, View, Image } from 'react-native';
 import { ResponsiveGrid } from 'react-native-flexible-grid';
 import BottomNav from '../components/insta-bottom-nav';
 
 export default function InstagramExploreExample() {
-  const data = [
-    {
-      imageUrl: 'https://picsum.photos/200/300?random=1',
-    },
-    {
-      imageUrl: 'https://picsum.photos/200/300?random=2',
-    },
-    {
-      imageUrl: 'https://picsum.photos/200/300?random=3',
-      widthRatio: 1,
-      heightRatio: 2,
-    },
-    {
-      imageUrl: 'https://picsum.photos/200/300?random=4',
-    },
-    {
-      imageUrl: 'https://picsum.photos/200/300?random=5',
-    },
-    {
-      imageUrl: 'https://picsum.photos/200/300?random=6',
+  let idCounter = React.useRef(0);
+  interface DataProp {
+    id: number;
+    widthRatio?: number;
+    heightRatio?: number;
+    imageUrl: string;
+  }
 
-      widthRatio: 1,
-      heightRatio: 2,
-    },
-    {
-      imageUrl: 'https://picsum.photos/200/300?random=7',
+  const getData = () => {
+    const originalData = [
+      {
+        imageUrl: 'https://picsum.photos/200/300?random=1',
+      },
+      {
+        imageUrl: 'https://picsum.photos/200/300?random=2',
+      },
+      {
+        imageUrl: 'https://picsum.photos/200/300?random=3',
+        widthRatio: 1,
+        heightRatio: 2,
+      },
+      {
+        imageUrl: 'https://picsum.photos/200/300?random=4',
+      },
+      {
+        imageUrl: 'https://picsum.photos/200/300?random=5',
+      },
+      {
+        imageUrl: 'https://picsum.photos/200/300?random=6',
 
-      widthRatio: 2,
-      heightRatio: 2,
-    },
-    {
-      imageUrl: 'https://picsum.photos/200/300?random=8',
-    },
-    {
-      imageUrl: 'https://picsum.photos/200/300?random=9',
-    },
-    {
-      imageUrl: 'https://picsum.photos/200/300?random=10',
-    },
-  ];
+        widthRatio: 1,
+        heightRatio: 2,
+      },
+      {
+        imageUrl: 'https://picsum.photos/200/300?random=7',
 
-  const repeatedData = Array(5).fill(data).flat(); // repeated to display more items in grid
+        widthRatio: 2,
+        heightRatio: 2,
+      },
+      {
+        imageUrl: 'https://picsum.photos/200/300?random=8',
+      },
+      {
+        imageUrl: 'https://picsum.photos/200/300?random=9',
+      },
+      {
+        imageUrl: 'https://picsum.photos/200/300?random=10',
+      },
+    ];
 
-  const renderItem = (item: any, _: number) => {
+    let clonedData: DataProp[] = [];
+
+    for (let i = 0; i < 5; i++) {
+      const newData = originalData.map((item) => ({
+        ...item,
+        id: ++idCounter.current,
+      }));
+      clonedData = [...clonedData, ...newData];
+    }
+
+    return clonedData;
+  };
+
+  const renderItem = ({ item }: { item: DataProp }) => {
     return (
       <View style={styles.boxContainer}>
         <Image
@@ -57,7 +77,6 @@ export default function InstagramExploreExample() {
           style={styles.box}
           resizeMode="cover"
         />
-        <Text style={styles.text}>{item.text}</Text>
       </View>
     );
   };
@@ -70,12 +89,13 @@ export default function InstagramExploreExample() {
     >
       <ResponsiveGrid
         maxItemsPerColumn={3}
-        data={repeatedData}
+        data={getData()}
         renderItem={renderItem}
         showScrollIndicator={false}
         style={{
           padding: 5,
         }}
+        keyExtractor={(item: DataProp) => item.id.toString()}
       />
 
       <View

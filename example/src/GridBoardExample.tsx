@@ -6,6 +6,8 @@ import { StyleSheet, View, Text, Image, ScrollView } from 'react-native';
 import { FlexGrid } from 'react-native-flexible-grid';
 
 export default function GridBoardExamplePage() {
+  let idCounter = React.useRef(0);
+
   //generate sample data
   const data = () => {
     const items = [];
@@ -21,6 +23,7 @@ export default function GridBoardExamplePage() {
           tweetImage: 'https://picsum.photos/200/300?random=' + i,
           widthRatio: 6,
           heightRatio: 6,
+          id: ++idCounter.current,
         });
       } else {
         items.push({
@@ -31,6 +34,7 @@ export default function GridBoardExamplePage() {
             'The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog',
           widthRatio: 6,
           heightRatio: 3,
+          id: ++idCounter.current,
         });
       }
     }
@@ -38,7 +42,7 @@ export default function GridBoardExamplePage() {
     return items;
   };
 
-  const renderItem = (item: any, _: number) => {
+  const renderItem = ({ item }: any) => {
     return (
       <View
         style={{
@@ -167,6 +171,7 @@ export default function GridBoardExamplePage() {
             itemContainerStyle={{
               padding: 10,
             }}
+            keyExtractor={(item) => item.id.toString()}
           />
 
           <Text

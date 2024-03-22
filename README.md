@@ -77,12 +77,12 @@ import { FlexGrid } from 'react-native-flexible-grid';
 
 export default function App() {
   const data = [
-    { imageUrl: 'https://picsum.photos/200/300?random=1', widthRatio: 1, heightRatio: 1, text: "Item 1" },
-    { imageUrl: 'https://picsum.photos/200/300?random=2', widthRatio: 2, heightRatio: 1, text: "Item 2" },
-    { imageUrl: 'https://picsum.photos/200/300?random=3', widthRatio: 2, heightRatio: 1, text: "Item 3" },
+    { imageUrl: 'https://picsum.photos/200/300?random=1', widthRatio: 1, heightRatio: 1, text: "Item 1", id: 1 },
+    { imageUrl: 'https://picsum.photos/200/300?random=2', widthRatio: 2, heightRatio: 1, text: "Item 2", id: 2 },
+    { imageUrl: 'https://picsum.photos/200/300?random=3', widthRatio: 2, heightRatio: 1, text: "Item 3", id: 3 },
   ];
 
-  const renderItem = (item, index) => (
+  const renderItem = ({item, index}) => (
       <View style={styles.boxContainer}>
         <Image
           source={{ uri: item.imageUrl }}
@@ -96,6 +96,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <FlexGrid
+        keyExtractor={(item) => item.id.toString()}
         maxColumnRatioUnits={60}
         itemSizeUnit={60}
         data={data}
@@ -133,25 +134,25 @@ import { ResponsiveGrid } from 'react-native-flexible-grid';
 
 export default function App() {
   const data = [
-    { imageUrl: 'https://picsum.photos/200/300?random=1', widthRatio: 1, heightRatio: 1, text: "Item 1" },
-    { imageUrl: 'https://picsum.photos/200/300?random=2', widthRatio: 2, heightRatio: 1, text: "Item 2" },
-    { imageUrl: 'https://picsum.photos/200/300?random=3', widthRatio: 2, heightRatio: 1, text: "Item 3" },
+    { imageUrl: 'https://picsum.photos/200/300?random=1', widthRatio: 1, heightRatio: 1, text: "Item 1", id: 1 },
+    { imageUrl: 'https://picsum.photos/200/300?random=2', widthRatio: 2, heightRatio: 1, text: "Item 2", id: 2 },
+    { imageUrl: 'https://picsum.photos/200/300?random=3', widthRatio: 2, heightRatio: 1, text: "Item 3", id: 3 },
   ];
 
-  const renderItem = (item, index) => (
+  const renderItem = ({item, index}) => (
   <View style={styles.boxContainer}>
         <Image
           source={{ uri: item.imageUrl }}
           style={styles.box}
           resizeMode="cover"
         />
-        <Text style={styles.text}>{item.text}</Text>
       </View>
   );
 
   return (
     <View style={styles.container}>
       <ResponsiveGrid
+        keyExtractor={(item) => item.id.toString()}
         maxItemsPerColumn={3}
         data={data}
         renderItem={renderItem}
@@ -197,8 +198,14 @@ export default function App() {
       <td><code>Function</code></td>
       <td><code> () => null</code></td>
            <td><code>true</code></td>
-      <td>Its used for defining how each individual item should appear, it allows utilizing the item's properties to construct a custom layout or UI for that item within the grid.</td>
+      <td>Defines how each individual item should appear, it allows utilizing the item's properties to construct a custom layout or UI for that item within the grid.</td>
     </tr>
+      <td><code>keyExtractor</code></td>
+  <td><code>(item, index) => string</code></td>
+  <td><code>Function</code></td>
+  <td><code>false</code></td>
+   <td> Defines a function that extracts a unique key for a given item in the list. By default, the <code>keyExtractor</code> uses the item's index in the array as the key. This is crucial for optimizing the rendering and re-rendering of list items by providing a stable identity. The function receives an item from the data array and its index, and should return a unique string. Providing a custom <code>keyExtractor</code> is recommended when the items have a unique identifier other than the index, especially in cases where the list's order might change, or items are dynamically added or removed, to ensure consistent and efficient updates. </td>
+</tr>
     <tr>
       <td><code>maxColumnRatioUnits</code></td>
       <td><code>Number</code></td>
@@ -243,7 +250,7 @@ While, a lower buffer factor reduces the off-screen component count, optimizing 
       <td><code>Number</code></td>
       <td><code>200</code></td>
            <td><code>false</code></td>
-      <td>Specifies the interval, in milliseconds, at which scroll events are processed for the purpose of recalculating visible items and buffer in a virtualized grid. By setting this prop, developers can throttle the frequency of scroll event handling, optimizing performance during rapid scrolling by reducing the computational load associated with updating the list of visible items and buffer.
+      <td>Defines the interval, in milliseconds, at which scroll events are processed for the purpose of recalculating visible items and buffer in a virtualized grid. By setting this prop, developers can throttle the frequency of scroll event handling, optimizing performance during rapid scrolling by reducing the computational load associated with updating the list of visible items and buffer.
 
 A lower value results in more frequent updates, offering smoother visual updates of the grid's content at the potential cost of higher computational overhead. While, a higher interval decreases the frequency of updates, potentially improving performance but with less immediate recalculation triggered by scroll actions. This is crucial for fine-tuning the performance and experience of virtualized grid.
 </td>
@@ -269,6 +276,36 @@ A lower value results in more frequent updates, offering smoother visual updates
            <td><code>false</code></td>
       <td> Accepts a React Native <code>ViewStyle</code> object. This applies to the container of each item in the grid layout and can be used to create a gap between each grid item with padding, apply background color, etc. </td>
     </tr>
+
+<tr>
+  <td><code>onHorizontalEndReached</code></td>
+  <td><code>() => void</code></td>
+  <td><code>undefined</code></td>
+  <td><code>false</code></td>
+  <td>Defines a callback function that is called when the horizontal scroll position reaches the <code>onHorizontalEndReachedThreshold</code>. Useful for loading more data as the user scrolls horizontally.</td>
+</tr>
+    <tr>
+  <td><code>onHorizontalEndReachedThreshold</code></td>
+  <td><code>number</code></td>
+  <td><code>0.5</code></td>
+  <td><code>false</code></td>
+  <td>Defines the threshold for triggering <code>onHorizontalEndReached</code>. Represented as a fraction of the total width of the scrollable grid, indicating how far from the end the horizontal scroll must be to trigger the event.</td>
+</tr>
+<tr>
+  <td><code>onVerticalEndReached</code></td>
+  <td><code>() => void</code></td>
+  <td><code>undefined</code></td>
+  <td><code>false</code></td>
+  <td>Defines a callback function that is called when the vertical scroll position reaches the <code>onVerticalEndReachedThreshold</code>. Useful for loading more data as the user scrolls vertically.</td>
+</tr>
+<tr>
+  <td><code>onVerticalEndReachedThreshold</code></td>
+  <td><code>number</code></td>
+  <td><code>0.5</code></td>
+  <td><code>false</code></td>
+  <td>Defines the threshold for triggering <code>onVerticalEndReached</code>. Represented as a fraction of the total height of the scrollable grid, indicating how far from the end the vertical scroll must be to trigger the event.</td>
+</tr>
+
   </tbody>
 </table>
 
@@ -300,8 +337,15 @@ A lower value results in more frequent updates, offering smoother visual updates
       <td><code>Function</code></td>
       <td><code> () => null</code></td>
            <td><code>true</code></td>
-      <td>Its used for defining how each individual item should appear, it allows utilizing the item's properties to construct a custom layout or UI for that item within the grid.</td>
+      <td>Defines how each individual item should appear, it allows utilizing the item's properties to construct a custom layout or UI for that item within the grid.</td>
     </tr>
+    <tr>
+  <td><code>keyExtractor</code></td>
+  <td><code>(item, index) => string</code></td>
+  <td><code>Function</code></td>
+  <td><code>false</code></td>
+   <td> Defines a function that extracts a unique key for a given item in the list. By default, the <code>keyExtractor</code> uses the item's index in the array as the key. This is crucial for optimizing the rendering and re-rendering of list items by providing a stable identity. The function receives an item from the data array and its index, and should return a unique string. Providing a custom <code>keyExtractor</code> is recommended when the items have a unique identifier other than the index, especially in cases where the list's order might change, or items are dynamically added or removed, to ensure consistent and efficient updates. </td>
+</tr>
     <tr>
       <td><code>maxItemsPerColumn</code></td>
       <td><code>Number</code></td>
@@ -314,7 +358,7 @@ A lower value results in more frequent updates, offering smoother visual updates
       <td><code>Number</code></td>
       <td><code>containerWidth / maxItemsPerColumn</code></td>
       <td><code>false</code></td>
-      <td> Specifies the base unit height for items within the grid. This value serves as a foundational measure to determine the actual height of each grid item. The item's final height is calculated by multiplying this base unit height (<code>itemUnitHeight</code>) by the item's heightRatio, allowing for proportional scaling of items based on their content or design requirements. While <code>widthRatio</code> affects the item's width in relation to the column width, <code>itemUnitHeight</code> and <code>heightRatio</code> together define the item's vertical dimension, enabling dynamic grid layouts that adapt seamlessly to varying content sizes.</td>
+      <td> Defines the base unit height for items within the grid. This value serves as a foundational measure to determine the actual height of each grid item. The item's final height is calculated by multiplying this base unit height (<code>itemUnitHeight</code>) by the item's heightRatio, allowing for proportional scaling of items based on their content or design requirements. While <code>widthRatio</code> affects the item's width in relation to the column width, <code>itemUnitHeight</code> and <code>heightRatio</code> together define the item's vertical dimension, enabling dynamic grid layouts that adapt seamlessly to varying content sizes.</td>
     </tr>
     <tr>
       <td><code>virtualization</code></td>
@@ -346,7 +390,7 @@ While, a lower buffer factor reduces the off-screen component count, optimizing 
       <td><code>Number</code></td>
       <td><code>200</code></td>
            <td><code>false</code></td>
-      <td>Specifies the interval, in milliseconds, at which scroll events are processed for the purpose of recalculating visible items and buffer in a virtualized grid. By setting this prop, developers can throttle the frequency of scroll event handling, optimizing performance during rapid scrolling by reducing the computational load associated with updating the list of visible items and buffer.
+      <td>Defines the interval, in milliseconds, at which scroll events are processed for the purpose of recalculating visible items and buffer in a virtualized grid. By setting this prop, developers can throttle the frequency of scroll event handling, optimizing performance during rapid scrolling by reducing the computational load associated with updating the list of visible items and buffer.
 
 A lower value results in more frequent updates, offering smoother visual updates of the grid's content at the potential cost of higher computational overhead. While, a higher interval decreases the frequency of updates, potentially improving performance but with less immediate recalculation triggered by scroll actions. This is crucial for fine-tuning the performance and experience of virtualized grid.
 </td>
@@ -372,6 +416,21 @@ A lower value results in more frequent updates, offering smoother visual updates
            <td><code>false</code></td>
       <td> Accepts a React Native <code>ViewStyle</code> object. This applies to the container of each item in the grid layout and can be used to create a gap between each grid item with padding, apply background color, etc. </td>
     </tr>
+    <tr>
+  <td><code>onEndReached</code></td>
+  <td><code>() => void</code></td>
+  <td><code>undefined</code></td>
+  <td><code>false</code></td>
+  <td> Defines a callback function that is triggered when the scroll reaches near the end of the scrollable grid. Useful for loading more data as the user scrolls horizontally </td>
+</tr>
+<tr>
+  <td><code>onEndReachedThreshold</code></td>
+  <td><code>number</code></td>
+  <td><code>0.5</code></td>
+  <td><code>false</code></td>
+  <td> Defines the distance from the end of the content at which <code>onEndReached</code> should be triggered, expressed as a proportion of the total content length. For example, a value of <code>0.1</code> triggers the callback when the user has scrolled to within 10% of the end of the content. </td>
+</tr>
+
   </tbody>
 </table>
 

@@ -1,8 +1,14 @@
 import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 
+interface RenderItemProps {
+  item: any;
+  index: number;
+}
+
 export interface ResponsiveGridProps {
-  renderItem: (item: TileItem, index: number) => ReactNode;
+  keyExtractor?: (item: any, index: number) => string;
+  renderItem: ({ item, index }: RenderItemProps) => ReactNode;
   data: TileItem[];
   maxItemsPerColumn: number;
   scrollEventInterval?: number;
@@ -12,6 +18,8 @@ export interface ResponsiveGridProps {
   style?: StyleProp<ViewStyle>;
   itemContainerStyle?: StyleProp<ViewStyle>;
   itemUnitHeight?: number;
+  onEndReached?: () => void;
+  onEndReachedThreshold?: number;
 }
 
 export interface TileItem {

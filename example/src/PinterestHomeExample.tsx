@@ -5,42 +5,62 @@ import { StyleSheet, View, Image } from 'react-native';
 import { ResponsiveGrid } from 'react-native-flexible-grid';
 
 export default function PinterestExample() {
-  const data = [
-    {
-      imageUrl: 'https://picsum.photos/200/300?random=1',
-      widthRatio: 1,
-      heightRatio: 4,
-    },
-    {
-      imageUrl: 'https://picsum.photos/200/300?random=2',
-      widthRatio: 1,
-      heightRatio: 3,
-    },
-    {
-      imageUrl: 'https://picsum.photos/200/300?random=3',
-      widthRatio: 1,
-      heightRatio: 4,
-    },
-    {
-      imageUrl: 'https://picsum.photos/200/300?random=4',
-      widthRatio: 1,
-      heightRatio: 5,
-    },
-    {
-      imageUrl: 'https://picsum.photos/200/300?random=5',
-      widthRatio: 1,
-      heightRatio: 5,
-    },
-    {
-      imageUrl: 'https://picsum.photos/200/300?random=6',
-      widthRatio: 1,
-      heightRatio: 3,
-    },
-  ];
+  let idCounter = React.useRef(0);
+  interface DataProp {
+    id: number;
+    widthRatio?: number;
+    heightRatio?: number;
+    imageUrl: string;
+  }
 
-  const repeatedData = Array(5).fill(data).flat(); // repeated to display more items in grid
+  const getData = () => {
+    const originalData = [
+      {
+        imageUrl: 'https://picsum.photos/200/300?random=1',
+        widthRatio: 1,
+        heightRatio: 4,
+      },
+      {
+        imageUrl: 'https://picsum.photos/200/300?random=2',
+        widthRatio: 1,
+        heightRatio: 3,
+      },
+      {
+        imageUrl: 'https://picsum.photos/200/300?random=3',
+        widthRatio: 1,
+        heightRatio: 4,
+      },
+      {
+        imageUrl: 'https://picsum.photos/200/300?random=4',
+        widthRatio: 1,
+        heightRatio: 5,
+      },
+      {
+        imageUrl: 'https://picsum.photos/200/300?random=5',
+        widthRatio: 1,
+        heightRatio: 5,
+      },
+      {
+        imageUrl: 'https://picsum.photos/200/300?random=6',
+        widthRatio: 1,
+        heightRatio: 3,
+      },
+    ];
 
-  const renderItem = (item: any, _: number) => {
+    let clonedData: DataProp[] = [];
+
+    for (let i = 0; i < 5; i++) {
+      const newData = originalData.map((item) => ({
+        ...item,
+        id: ++idCounter.current,
+      }));
+      clonedData = [...clonedData, ...newData];
+    }
+
+    return clonedData;
+  };
+
+  const renderItem = ({ item }: { item: DataProp }) => {
     return (
       <View style={styles.boxContainer}>
         <Image
@@ -61,13 +81,14 @@ export default function PinterestExample() {
     >
       <ResponsiveGrid
         maxItemsPerColumn={2}
-        data={repeatedData}
+        data={getData()}
         renderItem={renderItem}
         itemUnitHeight={80} // set itemUnitHeight to control uneven tiles
         style={{
           padding: 5,
         }}
         showScrollIndicator={false}
+        keyExtractor={(item: DataProp) => item.id.toString()}
       />
     </View>
   );

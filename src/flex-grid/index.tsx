@@ -19,6 +19,11 @@ export const FlexGrid: React.FC<FlexGridProps> = ({
   renderItem = () => null,
   style = {},
   itemContainerStyle = {},
+  keyExtractor = (_, index) => String(index), // default to item index if no keyExtractor is provided
+  onHorizontalEndReachedThreshold = 0.5, // default to 50% of the container width
+  onHorizontalEndReached,
+  onVerticalEndReachedThreshold = 0.5, // default to 50% of the container height
+  onVerticalEndReached,
 }) => {
   const [visibleItems, setVisibleItems] = useState<FlexGridTile[]>([]);
 
@@ -28,6 +33,11 @@ export const FlexGrid: React.FC<FlexGridProps> = ({
     x: number;
     y: number;
   }>({ x: 0, y: 0 });
+
+  const onEndReachedCalled = useRef<{ x: boolean; y: boolean }>({
+    x: false,
+    y: false,
+  });
 
   const { totalHeight, totalWidth, gridItems } = useMemo(() => {
     return calcFlexGrid(data, maxColumnRatioUnits, itemSizeUnit);
@@ -71,29 +81,71 @@ export const FlexGrid: React.FC<FlexGridProps> = ({
   const onHorizontalScroll = (
     event: NativeSyntheticEvent<NativeScrollEvent>
   ) => {
-    if (!virtualization) return;
-
     const { nativeEvent } = event;
+
+    const currentScrollX = nativeEvent.contentOffset.x;
 
     scrollPosition.current = {
       ...scrollPosition.current,
       x: nativeEvent.contentOffset.x,
     };
 
-    throttledUpdateVisibleItems();
+    // Calculate the position to check against the horizontal threshold
+    const contentWidth = totalWidth;
+    const scrollViewWidth = containerSize.width;
+    const threshold = onHorizontalEndReachedThreshold * scrollViewWidth;
+
+    // Check if we've reached the horizontal threshold for calling onHorizontalEndReached
+    if (
+      !onEndReachedCalled.current.x &&
+      currentScrollX + scrollViewWidth + threshold >= contentWidth
+    ) {
+      onEndReachedCalled.current.x = true; // Marked as called to prevent subsequent calls
+      onHorizontalEndReached?.(); // call the onHorizontalEndReached function if it exists
+    }
+
+    // Reset the flag when scrolled away from the bottom
+    if (currentScrollX + scrollViewWidth + threshold * 2 < contentWidth) {
+      onEndReachedCalled.current.x = false;
+    }
+
+    if (virtualization) {
+      throttledUpdateVisibleItems();
+    }
   };
 
   const onVerticalScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    if (!virtualization) return;
-
     const { nativeEvent } = event;
+
+    const currentScrollY = nativeEvent.contentOffset.y;
 
     scrollPosition.current = {
       ...scrollPosition.current,
       y: nativeEvent.contentOffset.y,
     };
 
-    throttledUpdateVisibleItems();
+    // Calculate the position to check against the vertical threshold
+    const contentHeight = totalHeight;
+    const scrollViewHeight = containerSize.height;
+    const threshold = onVerticalEndReachedThreshold * scrollViewHeight;
+
+    // Check if we've reached the horizontal threshold for calling onVerticalEndReached
+    if (
+      !onEndReachedCalled.current.y &&
+      currentScrollY + scrollViewHeight + threshold >= contentHeight
+    ) {
+      onEndReachedCalled.current.y = true; // Marked as called to prevent subsequent calls
+      onVerticalEndReached?.(); // call the onVerticalEndReached function if it exists
+    }
+
+    // Reset the flag when scrolled away from the bottom
+    if (currentScrollY + scrollViewHeight + threshold * 2 < contentHeight) {
+      onEndReachedCalled.current.y = false;
+    }
+
+    if (virtualization) {
+      throttledUpdateVisibleItems();
+    }
   };
 
   useEffect(() => {
@@ -101,6 +153,9 @@ export const FlexGrid: React.FC<FlexGridProps> = ({
     if (virtualization) {
       updateVisibleItems();
     }
+
+    // Reset onEndReachedCalled to false when data changes, allowing onEndReached functions to be called again
+    onEndReachedCalled.current = { x: false, y: false };
   }, [itemSizeUnit, maxColumnRatioUnits, data, virtualization, containerSize]);
 
   if (!renderedList) {
@@ -134,7 +189,7 @@ export const FlexGrid: React.FC<FlexGridProps> = ({
           >
             {renderedList.map((item, index) => (
               <View
-                key={index}
+                key={keyExtractor(item, index)}
                 style={[
                   {
                     position: 'absolute',
@@ -146,7 +201,7 @@ export const FlexGrid: React.FC<FlexGridProps> = ({
                   itemContainerStyle,
                 ]}
               >
-                {renderItem(item, index)}
+                {renderItem({ item, index })}
               </View>
             ))}
           </View>
