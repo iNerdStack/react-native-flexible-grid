@@ -12,13 +12,15 @@ import InstagramExploreExample from './InstagramExploreExample';
 import PinterestExample from './PinterestHomeExample';
 import GridBoardExamplePage from './GridBoardExample';
 import InfiniteScrollExample from './InfiniteScrollExample';
+import MultiDirectionScrollExample from './MultiDirectionScrollExample';
 
 type ScreenName =
   | 'Landing'
   | 'InstagramExplore'
   | 'Pinterest'
   | 'InfiniteScrollExample'
-  | 'GridBoardExample';
+  | 'GridBoardExample'
+  | 'MultiDirectionScrollExample';
 
 interface LandingProps {
   onNavigate: (screenName: ScreenName) => void;
@@ -53,6 +55,13 @@ const Landing = ({ onNavigate }: LandingProps) => {
         style={styles.button}
       >
         <Text style={styles.text}>Infinite Scroll Example </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={() => onNavigate('MultiDirectionScrollExample')}
+        style={styles.button}
+      >
+        <Text style={styles.text}>Multi-Direction Scroll Example </Text>
       </TouchableOpacity>
     </View>
   );
@@ -90,6 +99,9 @@ const App = () => {
       {currentScreen === 'InstagramExplore' && <InstagramExploreExample />}
       {currentScreen === 'Pinterest' && <PinterestExample />}
       {currentScreen === 'GridBoardExample' && <GridBoardExamplePage />}
+      {currentScreen === 'MultiDirectionScrollExample' && (
+        <MultiDirectionScrollExample />
+      )}
     </SafeAreaView>
   );
 };

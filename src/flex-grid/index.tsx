@@ -7,6 +7,7 @@ import type { FlexGridProps, FlexGridTile } from './types';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { calcFlexGrid } from './calc-flex-grid';
 import useThrottle from '../hooks/use-throttle';
+import { renderPropComponent } from '../libs/render-prop-component';
 
 export const FlexGrid: React.FC<FlexGridProps> = ({
   data = [],
@@ -24,6 +25,8 @@ export const FlexGrid: React.FC<FlexGridProps> = ({
   onHorizontalEndReached,
   onVerticalEndReachedThreshold = 0.5, // default to 50% of the container height
   onVerticalEndReached,
+  HeaderComponent = null,
+  FooterComponent = null,
 }) => {
   const [visibleItems, setVisibleItems] = useState<FlexGridTile[]>([]);
 
@@ -181,8 +184,18 @@ export const FlexGrid: React.FC<FlexGridProps> = ({
           scrollEventThrottle={32}
           showsVerticalScrollIndicator={showScrollIndicator}
         >
+          {/* Render HeaderComponent if provided */}
+          <View
+          // onLayout={({ nativeEvent }) => {
+          //   setHeaderComponentHeight(nativeEvent.layout.height);
+          // }}
+          >
+            {renderPropComponent(HeaderComponent)}
+          </View>
+
           <View
             style={{
+              flex: 1,
               height: totalHeight,
               width: totalWidth,
             }}
@@ -204,6 +217,15 @@ export const FlexGrid: React.FC<FlexGridProps> = ({
                 {renderItem({ item, index })}
               </View>
             ))}
+          </View>
+
+          {/* Render FooterComponent if provided */}
+          <View
+          // onLayout={({ nativeEvent }) => {
+          //   setFooterComponentHeight(nativeEvent.layout.height);
+          // }}
+          >
+            {renderPropComponent(FooterComponent)}
           </View>
         </ScrollView>
       </ScrollView>

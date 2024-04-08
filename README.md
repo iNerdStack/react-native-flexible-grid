@@ -306,6 +306,21 @@ A lower value results in more frequent updates, offering smoother visual updates
   <td>Defines the threshold for triggering <code>onVerticalEndReached</code>. Represented as a fraction of the total height of the scrollable grid, indicating how far from the end the vertical scroll must be to trigger the event.</td>
 </tr>
 
+<tr>
+  <td><code>HeaderComponent</code></td>
+  <td><code>React.ComponentType&lt;any&gt; | React.ReactElement | null | undefined</code></td>
+  <td><code>null</code></td>
+  <td><code>false</code></td>
+  <td>Accepts a React component or element that will be rendered at the top of the grid, before any grid items are displayed. Suitable for titles, search bar, etc</td>
+</tr>
+<tr>
+  <td><code>FooterComponent</code></td>
+  <td><code>React.ComponentType&lt;any&gt; | React.ReactElement | null | undefined</code></td>
+  <td><code>null</code></td>
+  <td><code>false</code></td>
+  <td>Accepts a React component or element that will be rendered at the bottom of the grid, after all the grid items have been displayed. Suitable for load more buttons, indicator or component</td>
+</tr>
+
   </tbody>
 </table>
 
@@ -429,6 +444,21 @@ A lower value results in more frequent updates, offering smoother visual updates
   <td><code>0.5</code></td>
   <td><code>false</code></td>
   <td> Defines the distance from the end of the content at which <code>onEndReached</code> should be triggered, expressed as a proportion of the total content length. For example, a value of <code>0.1</code> triggers the callback when the user has scrolled to within 10% of the end of the content. </td>
+</tr>
+
+<tr>
+  <td><code>HeaderComponent</code></td>
+  <td><code>React.ComponentType&lt;any&gt; | React.ReactElement | null | undefined</code></td>
+  <td><code>null</code></td>
+  <td><code>false</code></td>
+  <td>Accepts a React component or element that will be rendered at the top of the grid, before any grid items are displayed. Suitable for titles, search bar, etc</td>
+</tr>
+<tr>
+  <td><code>FooterComponent</code></td>
+  <td><code>React.ComponentType&lt;any&gt; | React.ReactElement | null | undefined</code></td>
+  <td><code>null</code></td>
+  <td><code>false</code></td>
+  <td>Accepts a React component or element that will be rendered at the bottom of the grid, after all the grid items have been displayed. Suitable for load more buttons, indicator or component</td>
 </tr>
 
   </tbody>

@@ -3,11 +3,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { ResponsiveGrid } from 'react-native-flexible-grid';
+import { FlexGrid } from 'react-native-flexible-grid';
 
-const InfiniteScrollExample = () => {
-  const [data, setData] = useState<DataProp[]>([]);
+const MultiDirectionScrollExample = () => {
   const [loading, setLoading] = useState(false);
+  const [data, setData] = useState<DataProp[]>([]);
 
   let idCounter = React.useRef(0);
 
@@ -18,14 +18,30 @@ const InfiniteScrollExample = () => {
     [key: string]: any;
   }
 
+  const loadData = () => {
+    console.log('loadData called');
+    if (loading) return; // Prevent multiple loads
+    setLoading(true);
+
+    setTimeout(() => {
+      // Simulate network request
+      const newData = getData(7);
+
+      setData((prevData) => [...prevData, ...newData]); // Append new data
+      setLoading(false);
+    }, 1000);
+  };
+
   const getData = (repeatedTimes: number) => {
     const originalData = [
+      { widthRatio: 2, heightRatio: 2 },
       { widthRatio: 1, heightRatio: 1 },
       { widthRatio: 1, heightRatio: 1 },
-      { widthRatio: 1, heightRatio: 2 },
-      { widthRatio: 1, heightRatio: 3 },
+      { widthRatio: 2, heightRatio: 1 },
       { widthRatio: 2, heightRatio: 1 },
       { widthRatio: 3, heightRatio: 1 },
+      { widthRatio: 2, heightRatio: 1 },
+      { widthRatio: 1, heightRatio: 1 },
     ];
 
     let clonedData: DataProp[] = [];
@@ -44,20 +60,6 @@ const InfiniteScrollExample = () => {
   useEffect(() => {
     loadData();
   }, []);
-
-  const loadData = () => {
-    console.log('loadData called');
-    if (loading) return; // Prevent multiple loads
-    setLoading(true);
-
-    setTimeout(() => {
-      // Simulate network request
-      const newData = getData(5);
-
-      setData((prevData) => [...prevData, ...newData]); // Append new data
-      setLoading(false);
-    }, 4000);
-  };
 
   const renderFooter = () => {
     if (!loading) return null;
@@ -83,7 +85,7 @@ const InfiniteScrollExample = () => {
           padding: 20,
           justifyContent: 'center',
           alignItems: 'center',
-          backgroundColor: 'white',
+          backgroundColor: 'lightyellow',
         }}
       >
         <Text
@@ -92,7 +94,7 @@ const InfiniteScrollExample = () => {
             fontWeight: 'bold',
           }}
         >
-          Infinite Grid Example
+          Multi-Direction Scroll Grid Example
         </Text>
       </View>
     );
@@ -138,24 +140,18 @@ const InfiniteScrollExample = () => {
         flex: 1,
       }}
     >
-      <ResponsiveGrid
-        maxItemsPerColumn={4}
+      <FlexGrid
+        maxColumnRatioUnits={8}
+        itemSizeUnit={60}
         data={data}
-        itemContainerStyle={{
-          padding: 2,
-        }}
         renderItem={renderItem}
-        style={{
-          backgroundColor: 'white',
-        }}
         HeaderComponent={renderHeader}
         FooterComponent={renderFooter}
-        keyExtractor={(item) => item.id}
-        onEndReached={loadData}
-        onEndReachedThreshold={0.2}
+        onHorizontalEndReached={loadData}
+        onVerticalEndReached={loadData}
       />
     </View>
   );
 };
 
-export default InfiniteScrollExample;
+export default MultiDirectionScrollExample;

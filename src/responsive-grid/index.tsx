@@ -7,6 +7,7 @@ import type { ResponsiveGridProps, TileItem } from './types';
 import { calcResponsiveGrid } from './calc-responsive-grid';
 import type { NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
 import useThrottle from '../hooks/use-throttle';
+import { renderPropComponent } from '../libs/render-prop-component';
 
 export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
   data = [],
@@ -22,6 +23,8 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
   onEndReached,
   onEndReachedThreshold = 0.5, // default to 50% of the container height
   keyExtractor = (_, index) => String(index), // default to item index if no keyExtractor is provided
+  HeaderComponent = null,
+  FooterComponent = null,
 }) => {
   const [visibleItems, setVisibleItems] = useState<TileItem[]>([]);
 
@@ -30,6 +33,10 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
   const onEndReachedCalled = useRef<boolean>(false);
 
   const scrollYPosition = useRef<number>(0);
+
+  const [footerComponentHeight, setFooterComponentHeight] = useState(0);
+
+  const [headerComponentHeight, setHeaderComponentHeight] = useState(0);
 
   const { gridViewHeight, gridItems } = useMemo(
     () =>
@@ -43,6 +50,9 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
   );
 
   const renderedItems = virtualization ? visibleItems : gridItems;
+
+  const sumScrollViewHeight =
+    gridViewHeight + headerComponentHeight + footerComponentHeight;
 
   const updateVisibleItems = () => {
     if (!virtualization) return;
@@ -120,15 +130,23 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
         onScroll={onScroll}
         scrollEventThrottle={32}
         contentContainerStyle={{
-          height: gridViewHeight,
+          height: sumScrollViewHeight || '100%',
           width: containerSize.width,
         }}
         showsVerticalScrollIndicator={showScrollIndicator}
       >
+        {/* Render HeaderComponent if provided */}
+        <View
+          onLayout={({ nativeEvent }) => {
+            setHeaderComponentHeight(nativeEvent.layout.height);
+          }}
+        >
+          {renderPropComponent(HeaderComponent)}
+        </View>
+
         <View
           style={{
-            height: gridViewHeight,
-            width: containerSize.width,
+            flex: 1,
           }}
         >
           {renderedItems.map((item, index) => (
@@ -148,6 +166,15 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
               {renderItem({ item, index })}
             </View>
           ))}
+        </View>
+
+        {/* Render FooterComponent if provided */}
+        <View
+          onLayout={({ nativeEvent }) => {
+            setFooterComponentHeight(nativeEvent.layout.height);
+          }}
+        >
+          {renderPropComponent(FooterComponent)}
         </View>
       </ScrollView>
     </View>

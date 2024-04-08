@@ -1,3 +1,4 @@
+import type React from 'react';
 import type { ReactNode } from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
 interface RenderItemProps {
@@ -20,6 +21,16 @@ export interface FlexGridProps {
   onHorizontalEndReached?: () => void;
   onVerticalEndReachedThreshold?: number;
   onVerticalEndReached?: () => void;
+  FooterComponent?:
+    | React.ComponentType<any>
+    | React.ReactElement<any, string | React.JSXElementConstructor<any>>
+    | null
+    | undefined;
+  HeaderComponent?:
+    | React.ComponentType<any>
+    | React.ReactElement<any, string | React.JSXElementConstructor<any>>
+    | null
+    | undefined;
 }
 
 export interface FlexGridTile {

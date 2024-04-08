@@ -6,7 +6,7 @@ We want this community to be friendly and respectful to each other. Please follo
 
 ## Development workflow
 
-This project is a monorepo managed using [Yarn workspaces](https://yarnpkg.com/features/workspaces). It contains the following packages:
+This project is managed using [Yarn workspaces](https://yarnpkg.com/features/workspaces). It contains the following packages:
 
 - The library package in the root directory.
 - An example app in the `example/` directory.
@@ -21,7 +21,7 @@ yarn
 
 The [example app](/example/) demonstrates usage of the library. You need to run it to test any changes you make.
 
-It is configured to use the local version of the library, so any changes you make to the library's source code will be reflected in the example app. Changes to the library's JavaScript code will be reflected in the example app without a rebuild, but native code changes will require a rebuild of the example app.
+It is configured to use the local version of the library, so any changes you make to the library's source code will be reflected in the example app. Changes to the library's JavaScript code will be reflected in the example app without a rebuild.
 
 You can use various commands from the root directory to work with the project.
 
@@ -79,7 +79,6 @@ We follow the [conventional commits specification](https://www.conventionalcommi
 - `test`: adding or updating tests, e.g. add integration tests using detox.
 - `chore`: tooling changes, e.g. change CI config.
 
-Our pre-commit hooks verify that your commit message matches this format when committing.
 
 ### Linting and tests
 
@@ -87,16 +86,15 @@ Our pre-commit hooks verify that your commit message matches this format when co
 
 We use [TypeScript](https://www.typescriptlang.org/) for type checking, [ESLint](https://eslint.org/) with [Prettier](https://prettier.io/) for linting and formatting the code, and [Jest](https://jestjs.io/) for testing.
 
-Our pre-commit hooks verify that the linter and tests pass when committing.
 
 ### Publishing to npm
 
-We use [release-it](https://github.com/release-it/release-it) to make it easier to publish new versions. It handles common tasks like bumping version based on semver, creating tags and releases etc.
+Our project's new versions are carefully curated and published to npm by our core maintainers to ensure the integrity and stability of the package. They manually update the version in <code>package.json</code> according to semantic versioning (semver) rules. This steps are crucial for tracking different versions of the package, ensuring compatibility, maintaining the quality and reliability of our releases.
 
-To publish new versions, run the following:
+
 
 ```sh
-yarn release
+npm publish
 ```
 
 ### Scripts
