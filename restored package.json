@@ -1,0 +1,130 @@
+{
+  "name": "react-native-flexible-grid",
+  "version": "0.2.0",
+  "description": "React Native Flexible Grid is an advanced grid layout system inspired by CSS Grid, designed to facilitate responsive, customizable, and dynamic grid layouts in React Native applications. It supports both responsive and fixed layouts, enabling the creation of intricate designs with minimal effort.",
+  "main": "lib/commonjs/index",
+  "module": "lib/module/index",
+  "types": "lib/typescript/src/index.d.ts",
+  "react-native": "src/index",
+  "source": "src/index",
+  "files": [
+    "src",
+    "lib",
+    "*.podspec",
+    "!ios/build",
+    "!android/build",
+    "!android/gradle",
+    "!android/gradlew",
+    "!android/gradlew.bat",
+    "!android/local.properties",
+    "!**/__tests__",
+    "!**/__fixtures__",
+    "!**/__mocks__",
+    "!**/.*"
+  ],
+  "scripts": {
+    "example": "yarn workspace react-native-flexible-grid-example",
+    "test": "jest",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint \"**/*.{js,ts,tsx}\"",
+    "clean": "del-cli lib",
+    "prepare": "bob build"
+  },
+  "keywords": [
+    "react-native",
+    "ios",
+    "android",
+    "grid",
+    "grid-layout",
+    "masonry"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iNerdStack/react-native-flexible-grid.git"
+  },
+  "author": "Ajetunmobi Isaac <isaacajetunmobi@gmail.com> (https://github.com/iNerdStack)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/iNerdStack/react-native-flexible-grid/issues"
+  },
+  "homepage": "https://github.com/iNerdStack/react-native-flexible-grid#readme",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "devDependencies": {
+    "@react-native/eslint-config": "^0.73.1",
+    "@types/jest": "^29.5.5",
+    "@types/react": "^18.2.44",
+    "del-cli": "^5.1.0",
+    "eslint": "^8.51.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.1",
+    "jest": "^29.7.0",
+    "prettier": "^3.0.3",
+    "react": "18.2.0",
+    "react-native": "0.73.4",
+    "react-native-builder-bob": "^0.20.0",
+    "typescript": "^5.5.4"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  },
+  "workspaces": [
+    "example"
+  ],
+  "jest": {
+    "preset": "react-native",
+    "modulePathIgnorePatterns": [
+      "<rootDir>/example/node_modules",
+      "<rootDir>/lib/"
+    ]
+  },
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "@react-native",
+      "prettier"
+    ],
+    "rules": {
+      "prettier/prettier": [
+        "error",
+        {
+          "quoteProps": "consistent",
+          "singleQuote": true,
+          "tabWidth": 2,
+          "trailingComma": "es5",
+          "useTabs": false
+        }
+      ]
+    }
+  },
+  "eslintIgnore": [
+    "node_modules/",
+    "lib/"
+  ],
+  "prettier": {
+    "quoteProps": "consistent",
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "es5",
+    "useTabs": false
+  },
+  "react-native-builder-bob": {
+    "source": "src",
+    "output": "lib",
+    "targets": [
+      "commonjs",
+      "module",
+      [
+        "typescript",
+        {
+          "project": "tsconfig.build.json"
+        }
+      ]
+    ]
+  },
+  "directories": {
+    "example": "example"
+  }
+}
