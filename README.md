@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/iNerdStack/react-native-flexible-grid/actions/workflows/ci.yml/badge.svg)](https://github.com/iNerdStack/react-native-flexible-grid/actions/workflows/ci.yml)
 [![npm package](https://img.shields.io/npm/v/react-native-flexible-grid.svg?style=flat-square)](https://www.npmjs.org/package/react-native-flexible-grid)
-[![npm downloads](https://img.shields.io/npm/dt/react-native-flexible-grid.svg?maxAge=2592000)]()
+[![npm downloads](https://img.shields.io/npm/dt/react-native-flexible-grid.svg)]()
 
 
 `React Native Flexible Grid` is an advanced grid layout system inspired by CSS Grid, designed to facilitate responsive, customizable, and dynamic grid layouts in React Native applications. It supports both responsive and fixed layouts, enabling the creation of intricate designs with minimal effort.
