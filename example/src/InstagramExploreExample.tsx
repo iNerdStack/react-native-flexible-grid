@@ -1,12 +1,15 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
-import * as React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { StyleSheet, View, Image } from 'react-native';
 import { ResponsiveGrid } from 'react-native-flexible-grid';
 import BottomNav from '../components/insta-bottom-nav';
 
 export default function InstagramExploreExample() {
-  let idCounter = React.useRef(0);
+  let idCounter = useRef(0);
+  const [data, setData] = useState<DataProp[]>([]);
+
   interface DataProp {
     id: number;
     widthRatio?: number;
@@ -14,7 +17,7 @@ export default function InstagramExploreExample() {
     imageUrl: string;
   }
 
-  const getData = () => {
+  const generateData = () => {
     const originalData = [
       {
         imageUrl: 'https://picsum.photos/200/300?random=1',
@@ -81,6 +84,10 @@ export default function InstagramExploreExample() {
     );
   };
 
+  useEffect(() => {
+    setData(generateData());
+  }, []);
+
   return (
     <View
       style={{
@@ -89,7 +96,7 @@ export default function InstagramExploreExample() {
     >
       <ResponsiveGrid
         maxItemsPerColumn={3}
-        data={getData()}
+        data={data}
         renderItem={renderItem}
         showScrollIndicator={false}
         style={{
