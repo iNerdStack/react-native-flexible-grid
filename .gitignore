@@ -68,6 +68,8 @@ android/keystores/debug.keystore
 !.yarn/sdks
 !.yarn/versions
 
+package-lock.json
+
 # Expo
 .expo/
 

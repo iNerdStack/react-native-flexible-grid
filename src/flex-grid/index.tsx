@@ -185,13 +185,7 @@ export const FlexGrid: React.FC<FlexGridProps> = ({
           showsVerticalScrollIndicator={showScrollIndicator}
         >
           {/* Render HeaderComponent if provided */}
-          <View
-          // onLayout={({ nativeEvent }) => {
-          //   setHeaderComponentHeight(nativeEvent.layout.height);
-          // }}
-          >
-            {renderPropComponent(HeaderComponent)}
-          </View>
+          <View>{renderPropComponent(HeaderComponent)}</View>
 
           <View
             style={{
@@ -220,13 +214,7 @@ export const FlexGrid: React.FC<FlexGridProps> = ({
           </View>
 
           {/* Render FooterComponent if provided */}
-          <View
-          // onLayout={({ nativeEvent }) => {
-          //   setFooterComponentHeight(nativeEvent.layout.height);
-          // }}
-          >
-            {renderPropComponent(FooterComponent)}
-          </View>
+          <View>{renderPropComponent(FooterComponent)}</View>
         </ScrollView>
       </ScrollView>
     </View>

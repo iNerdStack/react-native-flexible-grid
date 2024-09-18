@@ -19,7 +19,7 @@ const MultiDirectionScrollExample = () => {
   }
 
   const loadData = () => {
-    console.log('loadData called');
+    // console.log('loadData called');
     if (loading) return; // Prevent multiple loads
     setLoading(true);
 
