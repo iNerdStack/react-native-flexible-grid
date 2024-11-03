@@ -63,7 +63,7 @@ export const calcResponsiveGrid = (
 
       // If widthRatio exceeds available space, adjust it
       if (widthRatio > availableWidth) {
-        widthRatio = availableWidth;
+        widthRatio = Math.max(1, availableWidth);
       }
     }
 
