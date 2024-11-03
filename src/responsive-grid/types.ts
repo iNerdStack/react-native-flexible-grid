@@ -20,6 +20,14 @@ export interface ResponsiveGridProps {
   /** Defines the maximum number of items that can be displayed within a single column of the grid. */
   maxItemsPerColumn: number;
 
+  /**
+   *  Prevents width overflow by adjusting items with width ratios that exceed
+   *  available columns in their row & width overlap by adjusting items that would overlap with items
+   *  extending from previous rows
+   * @default true
+   */
+  autoAdjustItemWidth?: boolean;
+
   /** Interval in milliseconds at which scroll events are processed for virtualization. Default is 200ms. */
   scrollEventInterval?: number;
 

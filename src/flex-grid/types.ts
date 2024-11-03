@@ -20,6 +20,14 @@ export interface FlexGridProps {
   /** Defines the base unit size for grid items. Actual item size is calculated by multiplying this with width and height ratios. */
   itemSizeUnit: number;
 
+  /**
+   *  Prevents width overflow by adjusting items with width ratios that exceed
+   *  available columns in their row & width overlap by adjusting items that would overlap with items
+   *  extending from previous rows
+   * @default true
+   */
+  autoAdjustItemWidth?: boolean;
+
   /** Function to render each item in the grid. Receives the item and its index as parameters. */
   renderItem: ({ item, index }: RenderItemProps) => ReactNode;
 
