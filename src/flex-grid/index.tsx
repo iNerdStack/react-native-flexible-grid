@@ -176,8 +176,7 @@ export const FlexGrid: React.FC<FlexGridProps> = ({
       style={[{ flexGrow: 1 }, style]}
       onLayout={(event) => {
         const { width, height } = event.nativeEvent.layout;
-        console.log(width, height);
-        setContainerSize({ width, height: 2000 });
+        setContainerSize({ width, height });
       }}
     >
       <ScrollView
