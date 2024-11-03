@@ -18,6 +18,7 @@ export const FlexGrid: React.FC<FlexGridProps> = ({
   virtualizedBufferFactor = 2,
   showScrollIndicator = true,
   renderItem = () => null,
+  autoAdjustItemWidth = true,
   style = {},
   itemContainerStyle = {},
   keyExtractor = (_, index) => String(index), // default to item index if no keyExtractor is provided
@@ -43,8 +44,13 @@ export const FlexGrid: React.FC<FlexGridProps> = ({
   });
 
   const { totalHeight, totalWidth, gridItems } = useMemo(() => {
-    return calcFlexGrid(data, maxColumnRatioUnits, itemSizeUnit);
-  }, [data, maxColumnRatioUnits, itemSizeUnit]);
+    return calcFlexGrid(
+      data,
+      maxColumnRatioUnits,
+      itemSizeUnit,
+      autoAdjustItemWidth
+    );
+  }, [data, maxColumnRatioUnits, itemSizeUnit, autoAdjustItemWidth]);
 
   const renderedList = virtualization ? visibleItems : gridItems;
 
@@ -170,7 +176,8 @@ export const FlexGrid: React.FC<FlexGridProps> = ({
       style={[{ flexGrow: 1 }, style]}
       onLayout={(event) => {
         const { width, height } = event.nativeEvent.layout;
-        setContainerSize({ width, height });
+        console.log(width, height);
+        setContainerSize({ width, height: 2000 });
       }}
     >
       <ScrollView

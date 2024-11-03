@@ -4,37 +4,77 @@ export const calcResponsiveGrid = (
   data: TileItem[],
   maxItemsPerColumn: number,
   containerWidth: number,
-  itemUnitHeight?: number
+  itemUnitHeight?: number,
+  autoAdjustItemWidth: boolean = true
 ): {
   gridItems: GridItem[];
   gridViewHeight: number;
 } => {
   const gridItems: GridItem[] = [];
-  const itemSizeUnit = containerWidth / maxItemsPerColumn; // Determine TileSize based on container width and max number of columns
-  let columnHeights: number[] = new Array(maxItemsPerColumn).fill(0); // Track the height of each column end.
+  const itemSizeUnit = containerWidth / maxItemsPerColumn;
+  let columnHeights: number[] = new Array(maxItemsPerColumn).fill(0);
+
+  const findAvailableWidth = (
+    startColumn: number,
+    currentTop: number
+  ): number => {
+    // Check each column from the start position
+    let availableWidth = 0;
+
+    for (let i = startColumn; i < maxItemsPerColumn; i++) {
+      // Check if there's any item from above rows protruding into this space
+      const hasProtrudingItem = gridItems.some((item) => {
+        const itemBottom = item.top + item.height;
+        const itemRight = item.left + item.width;
+        return (
+          item.top < currentTop && // Item starts above current row
+          itemBottom > currentTop && // Item extends into current row
+          item.left <= i * itemSizeUnit && // Item starts at or before this column
+          itemRight > i * itemSizeUnit // Item extends into this column
+        );
+      });
+
+      if (hasProtrudingItem) {
+        break; // Stop counting available width when we hit a protruding item
+      }
+
+      availableWidth++;
+    }
+
+    return availableWidth;
+  };
 
   data.forEach((item) => {
-    const widthRatio = item.widthRatio || 1;
+    let widthRatio = item.widthRatio || 1;
     const heightRatio = item.heightRatio || 1;
 
-    const itemWidth = widthRatio * itemSizeUnit;
-
-    const itemHeight = itemUnitHeight
-      ? itemUnitHeight * heightRatio
-      : heightRatio * itemSizeUnit; // Use itemUnitHeight if provided, else fallback to itemSizeUnit
-
-    // Find the column where the item should be placed.
     let columnIndex = findColumnForItem(
       columnHeights,
       widthRatio,
       maxItemsPerColumn
     );
 
-    // Calculate item's top and left positions.
+    if (autoAdjustItemWidth) {
+      // Get current row's height at the column index
+      const currentTop = columnHeights[columnIndex];
+
+      // Calculate available width considering both row end and protruding items
+      const availableWidth = findAvailableWidth(columnIndex, currentTop!);
+
+      // If widthRatio exceeds available space, adjust it
+      if (widthRatio > availableWidth) {
+        widthRatio = availableWidth;
+      }
+    }
+
+    const itemWidth = widthRatio * itemSizeUnit;
+    const itemHeight = itemUnitHeight
+      ? itemUnitHeight * heightRatio
+      : heightRatio * itemSizeUnit;
+
     const top = columnHeights[columnIndex]!;
     const left = columnIndex * itemSizeUnit;
 
-    // Place the item.
     gridItems.push({
       ...item,
       top,
@@ -43,19 +83,15 @@ export const calcResponsiveGrid = (
       height: itemHeight,
     });
 
-    // Update the column heights for the columns that the item spans.
-    // This needs to accommodate the actual height used (itemHeight).
+    // Update the column heights
     for (let i = columnIndex; i < columnIndex + widthRatio; i++) {
-      columnHeights[i] = top + itemHeight; // Update to use itemHeight
+      columnHeights[i] = top + itemHeight;
     }
   });
 
-  // Calculate the total height of the grid.
-  const gridViewHeight = Math.max(...columnHeights);
-
   return {
     gridItems,
-    gridViewHeight,
+    gridViewHeight: Math.max(...columnHeights),
   };
 };
 

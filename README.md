@@ -307,6 +307,14 @@ A lower value results in more frequent updates, offering smoother visual updates
 </tr>
 
 <tr>
+  <td><code>autoAdjustItemWidth</code></td>
+  <td><code>boolean</code></td>
+  <td><code>true</code></td>
+  <td><code>false</code></td>
+  <td> Prevents width overflow by adjusting items with width ratios that exceed available columns in their row & width overlap by adjusting items that would overlap with items extending from previous rows</td>
+</tr>
+
+<tr>
   <td><code>HeaderComponent</code></td>
   <td><code>React.ComponentType&lt;any&gt; | React.ReactElement | null | undefined</code></td>
   <td><code>null</code></td>
@@ -444,6 +452,14 @@ A lower value results in more frequent updates, offering smoother visual updates
   <td><code>0.5</code></td>
   <td><code>false</code></td>
   <td> Defines the distance from the end of the content at which <code>onEndReached</code> should be triggered, expressed as a proportion of the total content length. For example, a value of <code>0.1</code> triggers the callback when the user has scrolled to within 10% of the end of the content. </td>
+</tr>
+
+<tr>
+  <td><code>autoAdjustItemWidth</code></td>
+  <td><code>boolean</code></td>
+  <td><code>true</code></td>
+  <td><code>false</code></td>
+  <td> Prevents width overflow by adjusting items with width ratios that exceed available columns in their row & width overlap by adjusting items that would overlap with items extending from previous rows</td>
 </tr>
 
 <tr>

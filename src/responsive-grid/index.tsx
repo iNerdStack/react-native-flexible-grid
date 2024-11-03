@@ -14,6 +14,7 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
   maxItemsPerColumn = 3,
   virtualizedBufferFactor = 5,
   renderItem,
+  autoAdjustItemWidth = true,
   scrollEventInterval = 200, // milliseconds
   virtualization = true,
   showScrollIndicator = true,
@@ -44,9 +45,10 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
         data,
         maxItemsPerColumn,
         containerSize.width,
-        itemUnitHeight
+        itemUnitHeight,
+        autoAdjustItemWidth
       ),
-    [data, maxItemsPerColumn, containerSize]
+    [data, maxItemsPerColumn, containerSize, autoAdjustItemWidth]
   );
 
   const renderedItems = virtualization ? visibleItems : gridItems;
