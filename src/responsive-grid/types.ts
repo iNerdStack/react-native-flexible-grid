@@ -68,6 +68,8 @@ export interface ResponsiveGridProps {
     | React.ReactElement<any, string | React.JSXElementConstructor<any>>
     | null
     | undefined;
+
+  direction?: 'rtl' | 'ltr';
 }
 
 export interface TileItem {
