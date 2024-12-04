@@ -26,7 +26,9 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
   keyExtractor = (_, index) => String(index), // default to item index if no keyExtractor is provided
   HeaderComponent = null,
   FooterComponent = null,
+  direction = 'ltr',
 }) => {
+  const start = direction === 'ltr' ? 'left' : 'right';
   const [visibleItems, setVisibleItems] = useState<TileItem[]>([]);
 
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
@@ -158,7 +160,7 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
                 {
                   position: 'absolute',
                   top: item.top,
-                  left: item.left,
+                  [start]: item.left,
                   width: item.width,
                   height: item.height,
                 },
