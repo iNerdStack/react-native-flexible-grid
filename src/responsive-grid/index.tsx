@@ -28,7 +28,6 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
   FooterComponent = null,
   direction = 'ltr',
 }) => {
-  const start = direction === 'ltr' ? 'left' : 'right';
   const [visibleItems, setVisibleItems] = useState<TileItem[]>([]);
 
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
@@ -122,6 +121,20 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
     onEndReachedCalled.current = false;
   }, [gridItems, containerSize, virtualization]);
 
+  const getItemPositionStyle = (item: TileItem) => {
+    const baseStyle = {
+      position: 'absolute' as const,
+      top: item.top,
+      width: item.width,
+      height: item.height,
+    };
+
+    return {
+      ...baseStyle,
+      ...(direction === 'rtl' ? { right: item.left } : { left: item.left }),
+    };
+  };
+
   return (
     <View
       style={[{ flexGrow: 1 }, style]}
@@ -156,16 +169,7 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
           {renderedItems.map((item, index) => (
             <View
               key={keyExtractor(item, index)}
-              style={[
-                {
-                  position: 'absolute',
-                  top: item.top,
-                  [start]: item.left,
-                  width: item.width,
-                  height: item.height,
-                },
-                itemContainerStyle,
-              ]}
+              style={[getItemPositionStyle(item), itemContainerStyle]}
             >
               {renderItem({ item, index })}
             </View>

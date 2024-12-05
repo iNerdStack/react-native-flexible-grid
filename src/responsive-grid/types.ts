@@ -69,6 +69,10 @@ export interface ResponsiveGridProps {
     | null
     | undefined;
 
+  /**
+   * Determines the direction for arranging grid items in the layout: left-to-right (ltr) or right-to-left (rtl).
+   * @default ltr
+   */
   direction?: 'rtl' | 'ltr';
 }
 
