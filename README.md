@@ -384,6 +384,13 @@ A lower value results in more frequent updates, offering smoother visual updates
       <td> Defines the base unit height for items within the grid. This value serves as a foundational measure to determine the actual height of each grid item. The item's final height is calculated by multiplying this base unit height (<code>itemUnitHeight</code>) by the item's heightRatio, allowing for proportional scaling of items based on their content or design requirements. While <code>widthRatio</code> affects the item's width in relation to the column width, <code>itemUnitHeight</code> and <code>heightRatio</code> together define the item's vertical dimension, enabling dynamic grid layouts that adapt seamlessly to varying content sizes.</td>
     </tr>
     <tr>
+      <td><code>direction</code></td>
+      <td><code>string</code></td>
+      <td><code>ltr</code></td>
+      <td><code>false</code></td>
+      <td> Determines the direction for arranging grid items in the layout: left-to-right (ltr) or right-to-left (rtl). </td>
+    </tr>
+    <tr>
       <td><code>virtualization</code></td>
       <td><code>Boolean</code></td>
       <td><code>true</code></td>
