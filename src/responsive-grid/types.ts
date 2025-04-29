@@ -1,6 +1,7 @@
 import type React from 'react';
 import type { ReactNode } from 'react';
-import type { NativeScrollEvent, NativeSyntheticEvent, StyleProp, ViewStyle } from 'react-native';
+import type { StyleProp, ViewStyle } from 'react-native';
+import type { ReanimatedScrollEvent } from 'react-native-reanimated/lib/typescript/hook/commonTypes';
 
 interface RenderItemProps {
   item: any;
@@ -50,7 +51,7 @@ export interface ResponsiveGridProps {
   itemUnitHeight?: number;
 
   /** Callback function triggered when the scroll view is scrolled. */
-  onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
+  onScroll?: (event: ReanimatedScrollEvent) => void;
 
   /** Callback function triggered when the scroll reaches near the end of the scrollable grid. */
   onEndReached?: () => void;

@@ -2,11 +2,12 @@
 /* eslint-disable react-native/no-inline-styles */
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { ScrollView, View } from 'react-native';
+import { View } from 'react-native';
 import type { ResponsiveGridProps, TileItem } from './types';
 import { calcResponsiveGrid } from './calc-responsive-grid';
 import type { NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
 import useThrottle from '../hooks/use-throttle';
+import Animated, { useAnimatedScrollHandler } from 'react-native-reanimated';
 import { renderPropComponent } from '../libs/render-prop-component';
 
 export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
@@ -84,45 +85,41 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
     scrollEventInterval
   );
 
-  const throttledOnScroll = useThrottle(
-    (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-      const currentScrollY = event.nativeEvent.contentOffset.y;
-      scrollYPosition.current = currentScrollY;
+  const throttledOnScroll = useThrottle((currentScrollY: number) => {
+    scrollYPosition.current = currentScrollY;
 
-      // Calculate the position to check against the threshold
-      const contentHeight = gridViewHeight;
-      const scrollViewHeight = containerSize.height;
-      const threshold = onEndReachedThreshold * scrollViewHeight;
+    // Calculate the position to check against the threshold
+    const contentHeight = gridViewHeight;
+    const scrollViewHeight = containerSize.height;
+    const threshold = onEndReachedThreshold * scrollViewHeight;
 
-      // Check if we've reached the threshold for calling onEndReached
-      if (
-        !onEndReachedCalled.current &&
-        currentScrollY + scrollViewHeight + threshold >= contentHeight
-      ) {
-        onEndReachedCalled.current = true; // Marked as called to prevent subsequent calls
-        onEndReached?.(); // call the onEndReached function if it exists
-      }
+    // Check if we've reached the threshold for calling onEndReached
+    if (
+      !onEndReachedCalled.current &&
+      currentScrollY + scrollViewHeight + threshold >= contentHeight
+    ) {
+      onEndReachedCalled.current = true; // Marked as called to prevent subsequent calls
+      onEndReached?.(); // call the onEndReached function if it exists
+    }
 
-      // Reset the flag when scrolled away from the bottom
-      if (currentScrollY + scrollViewHeight + threshold * 2 < contentHeight) {
-        onEndReachedCalled.current = false;
-      }
+    // Reset the flag when scrolled away from the bottom
+    if (currentScrollY + scrollViewHeight + threshold * 2 < contentHeight) {
+      onEndReachedCalled.current = false;
+    }
 
-      // Update visible items for virtualization
-      if (virtualization) {
-        throttledUpdateVisibleItems();
-      }
-    },
-    32
-  );
+    // Update visible items for virtualization
+    if (virtualization) {
+      throttledUpdateVisibleItems();
+    }
+  }, 32);
 
-  const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+  const onScroll = useAnimatedScrollHandler((event) => {
     if (onScrollProp) {
       onScrollProp(event);
     }
 
-    throttledOnScroll(event);
-  };
+    throttledOnScroll(event.contentOffset.y);
+  });
 
   useEffect(() => {
     if (virtualization) {
@@ -155,7 +152,7 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
         setContainerSize({ width, height });
       }}
     >
-      <ScrollView
+      <Animated.ScrollView
         onScroll={onScroll}
         contentContainerStyle={{
           height: sumScrollViewHeight || '100%',
@@ -195,7 +192,7 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
         >
           {renderPropComponent(FooterComponent)}
         </View>
-      </ScrollView>
+      </Animated.ScrollView>
     </View>
   );
 };
