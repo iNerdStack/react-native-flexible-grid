@@ -1,6 +1,11 @@
 import type React from 'react';
 import type { ReactNode } from 'react';
-import type { StyleProp, ViewStyle } from 'react-native';
+import type {
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+  StyleProp,
+  ViewStyle,
+} from 'react-native';
 
 interface RenderItemProps {
   item: any;
@@ -48,6 +53,9 @@ export interface ResponsiveGridProps {
 
   /** Defines the base unit height for items within the grid. If not provided, it's calculated based on container width and maxItemsPerColumn. */
   itemUnitHeight?: number;
+
+  /** Callback function triggered when the scroll view is scrolled. */
+  onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
 
   /** Callback function triggered when the scroll reaches near the end of the scrollable grid. */
   onEndReached?: () => void;
