@@ -99,9 +99,8 @@ export default function InstagramExploreExample() {
         data={data}
         renderItem={renderItem}
         showScrollIndicator={false}
-        style={{
-          padding: 5,
-        }}
+        style={{ backgroundColor: 'red' }}
+        gap={50}
         keyExtractor={(item: DataProp) => item.id.toString()}
       />
 
@@ -121,7 +120,6 @@ export default function InstagramExploreExample() {
 const styles = StyleSheet.create({
   boxContainer: {
     flex: 1,
-    margin: 1,
   },
   image: {
     width: 100,

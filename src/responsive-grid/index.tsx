@@ -27,6 +27,7 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
   HeaderComponent = null,
   FooterComponent = null,
   direction = 'ltr',
+  gap = 0,
 }) => {
   const [visibleItems, setVisibleItems] = useState<TileItem[]>([]);
 
@@ -49,13 +50,24 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
         itemUnitHeight,
         autoAdjustItemWidth
       ),
-    [data, maxItemsPerColumn, containerSize, autoAdjustItemWidth]
+    [
+      data,
+      maxItemsPerColumn,
+      containerSize,
+      autoAdjustItemWidth,
+      itemUnitHeight,
+    ]
   );
 
   const renderedItems = virtualization ? visibleItems : gridItems;
 
+  // For gap support, we need to adjust the grid view height to account for gaps between rows
+  const adjustedGridViewHeight =
+    gridViewHeight +
+    (gap > 0 ? gap * (Math.ceil(data.length / maxItemsPerColumn) - 1) : 0);
+
   const sumScrollViewHeight =
-    gridViewHeight + headerComponentHeight + footerComponentHeight;
+    adjustedGridViewHeight + headerComponentHeight + footerComponentHeight;
 
   const updateVisibleItems = () => {
     if (!virtualization) return;
@@ -135,9 +147,18 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
     };
   };
 
+  // Calculate the values we need for the gap corrections
+  const halfGap = gap > 0 ? gap / 2 : 0;
+
   return (
     <View
-      style={[{ flexGrow: 1 }, style]}
+      style={[
+        {
+          flexGrow: 1,
+          overflow: 'hidden' as const,
+        },
+        style,
+      ]}
       onLayout={(event) => {
         const { width, height } = event.nativeEvent.layout;
         setContainerSize({ width, height });
@@ -146,9 +167,12 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
       <ScrollView
         onScroll={onScroll}
         scrollEventThrottle={32}
+        horizontal={false}
+        bounces={false}
+        showsHorizontalScrollIndicator={false}
         contentContainerStyle={{
           height: sumScrollViewHeight || '100%',
-          width: containerSize.width,
+          width: '100%',
         }}
         showsVerticalScrollIndicator={showScrollIndicator}
       >
@@ -163,13 +187,22 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
 
         <View
           style={{
-            flex: 1,
+            position: 'relative',
+            width: '100%',
+            ...(gap > 0 && {
+              margin: -halfGap,
+              width: containerSize.width + gap,
+            }),
           }}
         >
           {renderedItems.map((item, index) => (
             <View
               key={keyExtractor(item, index)}
-              style={[getItemPositionStyle(item), itemContainerStyle]}
+              style={[
+                getItemPositionStyle(item),
+                itemContainerStyle,
+                gap > 0 ? { padding: halfGap } : null,
+              ]}
             >
               {renderItem({ item, index })}
             </View>
