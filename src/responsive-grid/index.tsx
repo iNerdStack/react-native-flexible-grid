@@ -2,10 +2,15 @@
 /* eslint-disable react-native/no-inline-styles */
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, View, StyleSheet } from 'react-native';
+import type {
+  StyleProp,
+  ViewStyle,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+} from 'react-native';
 import type { ResponsiveGridProps, TileItem } from './types';
 import { calcResponsiveGrid } from './calc-responsive-grid';
-import type { NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
 import useThrottle from '../hooks/use-throttle';
 import { renderPropComponent } from '../libs/render-prop-component';
 
@@ -18,6 +23,7 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
   scrollEventInterval = 200, // milliseconds
   virtualization = true,
   showScrollIndicator = true,
+  bounces = true,
   style = {},
   itemContainerStyle = {},
   itemUnitHeight,
@@ -33,6 +39,12 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
 
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
 
+  // Extract padding values from style prop - renamed for clarity
+  const [componentPadding, setComponentPadding] = useState({
+    horizontal: 0,
+    vertical: 0,
+  });
+
   const onEndReachedCalled = useRef<boolean>(false);
 
   const scrollYPosition = useRef<number>(0);
@@ -41,22 +53,77 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
 
   const [headerComponentHeight, setHeaderComponentHeight] = useState(0);
 
+  // Get the effective width accounting for padding
+  const effectiveWidth = containerSize.width - componentPadding.horizontal * 2;
+
   const { gridViewHeight, gridItems } = useMemo(
     () =>
       calcResponsiveGrid(
         data,
         maxItemsPerColumn,
-        containerSize.width,
+        effectiveWidth > 0 ? effectiveWidth : containerSize.width,
         itemUnitHeight,
         autoAdjustItemWidth
       ),
-    [data, maxItemsPerColumn, containerSize, autoAdjustItemWidth]
+    [
+      data,
+      maxItemsPerColumn,
+      containerSize,
+      effectiveWidth,
+      autoAdjustItemWidth,
+      itemUnitHeight,
+    ]
   );
 
   const renderedItems = virtualization ? visibleItems : gridItems;
 
   const sumScrollViewHeight =
     gridViewHeight + headerComponentHeight + footerComponentHeight;
+
+  // Extract padding from style object
+  const extractPadding = (styleObj: StyleProp<ViewStyle>) => {
+    if (!styleObj) return { horizontal: 0, vertical: 0 };
+
+    const flatStyle = StyleSheet.flatten(styleObj);
+    let horizontal = 0;
+    let vertical = 0;
+
+    if (flatStyle.padding !== undefined) {
+      horizontal = vertical = Number(flatStyle.padding) || 0;
+    }
+
+    if (flatStyle.paddingHorizontal !== undefined) {
+      horizontal = Number(flatStyle.paddingHorizontal) || 0;
+    }
+
+    if (flatStyle.paddingVertical !== undefined) {
+      vertical = Number(flatStyle.paddingVertical) || 0;
+    }
+
+    if (
+      flatStyle.paddingLeft !== undefined ||
+      flatStyle.paddingRight !== undefined
+    ) {
+      const left = Number(flatStyle.paddingLeft) || 0;
+      const right = Number(flatStyle.paddingRight) || 0;
+      horizontal = Math.max(horizontal, left + right);
+    }
+
+    return { horizontal, vertical };
+  };
+
+  // Update padding values when style changes when component style is changed
+  useEffect(() => {
+    const newPadding = extractPadding(style);
+
+    // Only update state if padding values have actually changed
+    if (
+      newPadding.horizontal !== componentPadding.horizontal ||
+      newPadding.vertical !== componentPadding.vertical
+    ) {
+      setComponentPadding(newPadding);
+    }
+  }, [style, componentPadding.horizontal, componentPadding.vertical]);
 
   const updateVisibleItems = () => {
     if (!virtualization) return;
@@ -149,7 +216,13 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
 
   return (
     <View
-      style={[{ flexGrow: 1 }, style]}
+      style={[
+        {
+          flexGrow: 1,
+          overflow: 'hidden' as const,
+        },
+        style,
+      ]}
       onLayout={(event) => {
         const { width, height } = event.nativeEvent.layout;
         setContainerSize({ width, height });
@@ -157,9 +230,13 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
     >
       <ScrollView
         onScroll={onScroll}
+        scrollEventThrottle={onScrollProp ? 16 : 32}
+        horizontal={false}
+        bounces={bounces}
+        showsHorizontalScrollIndicator={false}
         contentContainerStyle={{
           height: sumScrollViewHeight || '100%',
-          width: containerSize.width,
+          width: '100%',
         }}
         showsVerticalScrollIndicator={showScrollIndicator}
       >
@@ -174,7 +251,8 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
 
         <View
           style={{
-            flex: 1,
+            position: 'relative',
+            width: '100%',
           }}
         >
           {renderedItems.map((item, index) => (

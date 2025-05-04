@@ -45,6 +45,9 @@ export interface ResponsiveGridProps {
   /** Controls the visibility of the scroll indicator. Default is true. */
   showScrollIndicator?: boolean;
 
+  /** Controls whether the ScrollView content can "bounce" when it reaches the end of the content. Default is true. */
+  bounces?: boolean;
+
   /** Style object for the outermost container of the component. */
   style?: StyleProp<ViewStyle>;
 

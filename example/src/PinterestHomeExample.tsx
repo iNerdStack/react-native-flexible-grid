@@ -98,6 +98,7 @@ const styles = StyleSheet.create({
   boxContainer: {
     flex: 1,
     padding: 5,
+    width: '100%',
   },
   image: {
     width: 100,

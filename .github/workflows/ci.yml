@@ -17,9 +17,6 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
-      - name: Install dependencies
-        run: yarn install
-
       - name: Lint files
         run: yarn lint
 
@@ -35,9 +32,6 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
-      - name: Install dependencies
-        run: yarn install
-
       - name: Run unit tests
         run: yarn test --maxWorkers=2 --coverage
 
@@ -50,9 +44,6 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
-      - name: Install dependencies
-        run: yarn install
-
       - name: Build package
         run: yarn prepare
 
@@ -64,9 +55,6 @@ jobs:
 
       - name: Setup
         uses: ./.github/actions/setup
-
-      - name: Install dependencies
-        run: yarn install
 
       - name: Build example for Web
         run: yarn example expo export:web
