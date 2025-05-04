@@ -1,6 +1,6 @@
 {
   "name": "react-native-flexible-grid",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "React Native Flexible Grid is an advanced grid layout system inspired by CSS Grid, designed to facilitate responsive, customizable, and dynamic grid layouts in React Native applications. It supports both responsive and fixed layouts, enabling the creation of intricate designs with minimal effort.",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
