@@ -230,7 +230,7 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
     >
       <ScrollView
         onScroll={onScroll}
-        scrollEventThrottle={onScrollProp ? 0 : 32}
+        scrollEventThrottle={onScrollProp ? 16 : 32}
         horizontal={false}
         bounces={bounces}
         showsHorizontalScrollIndicator={false}
