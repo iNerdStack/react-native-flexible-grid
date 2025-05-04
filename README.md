@@ -4,13 +4,11 @@
 [![npm package](https://img.shields.io/npm/v/react-native-flexible-grid.svg?style=flat-square)](https://www.npmjs.org/package/react-native-flexible-grid)
 [![npm downloads](https://img.shields.io/npm/dt/react-native-flexible-grid.svg)]()
 
-
 `React Native Flexible Grid` is an advanced grid layout system inspired by CSS Grid, designed to facilitate responsive, customizable, and dynamic grid layouts in React Native applications. It supports both responsive and fixed layouts, enabling the creation of intricate designs with minimal effort.
 
 <p align="center">
 <img src="https://raw.githubusercontent.com/iNerdStack/react-native-flexible-grid/main/example/assets/images/grid-layout.jpeg" width="500" height="500" alt="React Native Flexible Grid" >
 </p>
-
 
 ## 🌟 Features
 
@@ -37,7 +35,6 @@
   </tr>
 </table>
 
-
 <table>
   <tr>
        <td><img src="https://raw.githubusercontent.com/iNerdStack/react-native-flexible-grid/main/example/assets/gifs/gridboard-overflow-example.gif" alt="Grid Board Example" width="403px" height="100%" /></td>
@@ -47,14 +44,14 @@
   </tr>
 </table>
 
-
-
 ## 📦 Installation
 
 ```sh
 npm install react-native-flexible-grid
 ```
+
 or
+
 ```sh
 yarn add react-native-flexible-grid
 ```
@@ -62,35 +59,52 @@ yarn add react-native-flexible-grid
 ## 💡 Usage
 
 ### 1. Flex Grid
+
 `FlexGrid` is designed for creating highly flexible and dynamic grid layouts, capable of two-way scrolling to accommodate content that extends beyond both the viewport's width and height. By leveraging `maxColumnRatioUnits`, `itemSizeUnit`, and smooth scrolling mechanics, `FlexGrid` facilitates precise control over the grid's arrangement, dimensions, and scrolling behavior. This makes it exceptionally suited for applications requiring a versatile grid system that can display content in both horizontally and vertically overflowed layouts with ease.
 
-
-
 #### Use Cases:
+
 - **Interactive Galleries**: Optimal for galleries where users can explore content through both horizontal and vertical navigation.
 - **Board Layout**: Ideal for creating grid board with documents or media or files in a grid that exceeds the viewport, allowing for comprehensive exploration.
 - **Complex Layouts**: Perfect for applications demanding intricate grid arrangements that go beyond simple lists, including dashboards or design portfolios.
-
 
 ```jsx
 import { FlexGrid } from 'react-native-flexible-grid';
 
 export default function App() {
   const data = [
-    { imageUrl: 'https://picsum.photos/200/300?random=1', widthRatio: 1, heightRatio: 1, text: "Item 1", id: 1 },
-    { imageUrl: 'https://picsum.photos/200/300?random=2', widthRatio: 2, heightRatio: 1, text: "Item 2", id: 2 },
-    { imageUrl: 'https://picsum.photos/200/300?random=3', widthRatio: 2, heightRatio: 1, text: "Item 3", id: 3 },
+    {
+      imageUrl: 'https://picsum.photos/200/300?random=1',
+      widthRatio: 1,
+      heightRatio: 1,
+      text: 'Item 1',
+      id: 1,
+    },
+    {
+      imageUrl: 'https://picsum.photos/200/300?random=2',
+      widthRatio: 2,
+      heightRatio: 1,
+      text: 'Item 2',
+      id: 2,
+    },
+    {
+      imageUrl: 'https://picsum.photos/200/300?random=3',
+      widthRatio: 2,
+      heightRatio: 1,
+      text: 'Item 3',
+      id: 3,
+    },
   ];
 
-  const renderItem = ({item, index}) => (
-      <View style={styles.boxContainer}>
-        <Image
-          source={{ uri: item.imageUrl }}
-          style={styles.box}
-          resizeMode="cover"
-        />
-        <Text style={styles.text}>{item.text}</Text>
-      </View>
+  const renderItem = ({ item, index }) => (
+    <View style={styles.boxContainer}>
+      <Image
+        source={{ uri: item.imageUrl }}
+        style={styles.box}
+        resizeMode="cover"
+      />
+      <Text style={styles.text}>{item.text}</Text>
+    </View>
   );
 
   return (
@@ -109,44 +123,58 @@ export default function App() {
     </View>
   );
 }
-
 ```
 
-
 #### See Examples:
+
 1. <a href="https://github.com/iNerdStack/react-native-flexible-grid/blob/main/example/src/PinterestHomeExample.tsx">Grid Board Example </a>
-
-
 
 ### 2. Responsive Grid
 
 The `ResponsiveGrid` is designed for optimal responsiveness, dynamically adjusting grid items based on the container's width or a specified width within the component's style properties. Utilizing a combination of `maxItemsPerColumn` alongside item-specific `widthRatio` and `heightRatio`, it efficiently organizes content into a vertically scrollable grid. This component is ideally suited for layouts where vertical scrolling is preferred and where the grid's adaptability to varying container widths or device width is crucial.
 
 #### Use Cases:
+
 - **Content Feeds**: Perfect for vertically scrolling content feeds that require adaptability to different screen sizes.
 - **Image Galleries**: Ideal for image galleries where images need to be displayed in a responsive, organized or uneven manner.
 - **Product Listings**: Suitable for e-commerce apps needing to showcase products in a neatly arranged, responsive grid.
-
-
 
 ```jsx
 import { ResponsiveGrid } from 'react-native-flexible-grid';
 
 export default function App() {
   const data = [
-    { imageUrl: 'https://picsum.photos/200/300?random=1', widthRatio: 1, heightRatio: 1, text: "Item 1", id: 1 },
-    { imageUrl: 'https://picsum.photos/200/300?random=2', widthRatio: 2, heightRatio: 1, text: "Item 2", id: 2 },
-    { imageUrl: 'https://picsum.photos/200/300?random=3', widthRatio: 2, heightRatio: 1, text: "Item 3", id: 3 },
+    {
+      imageUrl: 'https://picsum.photos/200/300?random=1',
+      widthRatio: 1,
+      heightRatio: 1,
+      text: 'Item 1',
+      id: 1,
+    },
+    {
+      imageUrl: 'https://picsum.photos/200/300?random=2',
+      widthRatio: 2,
+      heightRatio: 1,
+      text: 'Item 2',
+      id: 2,
+    },
+    {
+      imageUrl: 'https://picsum.photos/200/300?random=3',
+      widthRatio: 2,
+      heightRatio: 1,
+      text: 'Item 3',
+      id: 3,
+    },
   ];
 
-  const renderItem = ({item, index}) => (
-  <View style={styles.boxContainer}>
-        <Image
-          source={{ uri: item.imageUrl }}
-          style={styles.box}
-          resizeMode="cover"
-        />
-      </View>
+  const renderItem = ({ item, index }) => (
+    <View style={styles.boxContainer}>
+      <Image
+        source={{ uri: item.imageUrl }}
+        style={styles.box}
+        resizeMode="cover"
+      />
+    </View>
   );
 
   return (
@@ -161,15 +189,12 @@ export default function App() {
     </View>
   );
 }
-
-
 ```
 
 #### See Examples:
+
 1. <a href="https://github.com/iNerdStack/react-native-flexible-grid/blob/main/example/src/InstagramExploreExample.tsx"> Instagram Explore Example</a>
-2.  <a href="https://github.com/iNerdStack/react-native-flexible-grid/blob/main/example/src/PinterestHomeExample.tsx">Pinterest Example</a>
-
-
+2. <a href="https://github.com/iNerdStack/react-native-flexible-grid/blob/main/example/src/PinterestHomeExample.tsx">Pinterest Example</a>
 
 ## ⚙️ Props
 
@@ -240,19 +265,21 @@ export default function App() {
       <br/>
 
 A higher buffer factor increases the number of items pre-loaded outside the viewport, contributing to a smoother scrolling experience as more content is ready for immediate display when scrolling. However, setting a large buffer factor can affect overall performance, especially on devices with limited resources, as it increases the number of components rendered off-screen.
- <br/>
+<br/>
 
 While, a lower buffer factor reduces the off-screen component count, optimizing performance and resource usage. This setting is beneficial for large data or resource-constrained environments. However, it may lead to brief moments where content needs to catch up with the user's scroll speed, momentarily displaying blank areas until new items are rendered.
-      </td>
-    </tr>
-       <tr>
-      <td><code>scrollEventInterval</code></td>
-      <td><code>Number</code></td>
-      <td><code>200</code></td>
-           <td><code>false</code></td>
-      <td>Defines the interval, in milliseconds, at which scroll events are processed for the purpose of recalculating visible items and buffer in a virtualized grid. By setting this prop, developers can throttle the frequency of scroll event handling, optimizing performance during rapid scrolling by reducing the computational load associated with updating the list of visible items and buffer.
+
+</td>
+</tr>
+<tr>
+<td><code>scrollEventInterval</code></td>
+<td><code>Number</code></td>
+<td><code>200</code></td>
+<td><code>false</code></td>
+<td>Defines the interval, in milliseconds, at which scroll events are processed for the purpose of recalculating visible items and buffer in a virtualized grid. By setting this prop, you can throttle the frequency of scroll event handling, optimizing performance during rapid scrolling by reducing the computational load associated with updating the list of visible items and buffer.
 
 A lower value results in more frequent updates, offering smoother visual updates of the grid's content at the potential cost of higher computational overhead. While, a higher interval decreases the frequency of updates, potentially improving performance but with less immediate recalculation triggered by scroll actions. This is crucial for fine-tuning the performance and experience of virtualized grid.
+
 </td>
     </tr>
     <tr>
@@ -410,19 +437,21 @@ A lower value results in more frequent updates, offering smoother visual updates
       <br/>
 
 A higher buffer factor increases the number of items pre-loaded outside the viewport, contributing to a smoother scrolling experience as more content is ready for immediate display when scrolling. However, setting a large buffer factor can affect overall performance, especially on devices with limited resources, as it increases the number of components rendered off-screen.
- <br/>
+<br/>
 
 While, a lower buffer factor reduces the off-screen component count, optimizing performance and resource usage. This setting is beneficial for large data or resource-constrained environments. However, it may lead to brief moments where content needs to catch up with the user's scroll speed, momentarily displaying blank areas until new items are rendered.
-      </td>
-    </tr>
-       <tr>
-      <td><code>scrollEventInterval</code></td>
-      <td><code>Number</code></td>
-      <td><code>200</code></td>
-           <td><code>false</code></td>
-      <td>Defines the interval, in milliseconds, at which scroll events are processed for the purpose of recalculating visible items and buffer in a virtualized grid. By setting this prop, developers can throttle the frequency of scroll event handling, optimizing performance during rapid scrolling by reducing the computational load associated with updating the list of visible items and buffer.
+
+</td>
+</tr>
+<tr>
+<td><code>scrollEventInterval</code></td>
+<td><code>Number</code></td>
+<td><code>200</code></td>
+<td><code>false</code></td>
+<td>Defines the interval, in milliseconds, at which scroll events are processed for the purpose of recalculating visible items and buffer in a virtualized grid. By setting this prop, you can throttle the frequency of scroll event handling, optimizing performance during rapid scrolling by reducing the computational load associated with updating the list of visible items and buffer.
 
 A lower value results in more frequent updates, offering smoother visual updates of the grid's content at the potential cost of higher computational overhead. While, a higher interval decreases the frequency of updates, potentially improving performance but with less immediate recalculation triggered by scroll actions. This is crucial for fine-tuning the performance and experience of virtualized grid.
+
 </td>
     </tr>
     <tr>
@@ -462,6 +491,22 @@ A lower value results in more frequent updates, offering smoother visual updates
 </tr>
 
 <tr>
+  <td><code>onScroll</code></td>
+  <td><code>(event: NativeSyntheticEvent<NativeScrollEvent>) => void</code></td>
+  <td><code>undefined</code></td>
+  <td><code>false</code></td>
+  <td>Callback function triggered when the scroll view is scrolled. Receives the scroll event as a parameter and can be used for custom scroll handling.</td>
+</tr>
+
+<tr>
+  <td><code>bounces</code></td>
+  <td><code>boolean</code></td>
+  <td><code>true</code></td>
+  <td><code>false</code></td>
+  <td>Controls whether the ScrollView content can "bounce" when it reaches the end of the content. When set to <code>false</code>, disables the bouncing effect.</td>
+</tr>
+
+<tr>
   <td><code>autoAdjustItemWidth</code></td>
   <td><code>boolean</code></td>
   <td><code>true</code></td>
@@ -487,8 +532,8 @@ A lower value results in more frequent updates, offering smoother visual updates
   </tbody>
 </table>
 
-
 ## 🚀 Vision and Roadmap
+
 Our mission is not just to provide a flexible layout solution but to improve grid systems and layout flexibility in React Native. By continuously refining our algorithm and incorporating feedback, we aim to bring CSS Grid-like capabilities to the React Native ecosystem, fostering creativity and pushing the boundaries of what's possible in app design with React Native.
 
 ## 🤝 Contributing

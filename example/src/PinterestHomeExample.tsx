@@ -85,9 +85,8 @@ export default function PinterestExample() {
         renderItem={renderItem}
         itemUnitHeight={80} // set itemUnitHeight to control uneven tiles
         style={{
-          padding: 10,
+          padding: 5,
         }}
-        gap={10}
         showScrollIndicator={false}
         keyExtractor={(item: DataProp) => item.id.toString()}
       />
@@ -98,6 +97,7 @@ export default function PinterestExample() {
 const styles = StyleSheet.create({
   boxContainer: {
     flex: 1,
+    padding: 5,
     width: '100%',
   },
   image: {
