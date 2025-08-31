@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import { ScrollView, View, StyleSheet } from 'react-native';
 import type {
   StyleProp,
@@ -81,7 +81,7 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
     gridViewHeight + headerComponentHeight + footerComponentHeight;
 
   // Extract padding from style object
-  const extractPadding = (styleObj: StyleProp<ViewStyle>) => {
+  const extractPadding = useCallback((styleObj: StyleProp<ViewStyle>) => {
     if (!styleObj) return { horizontal: 0, vertical: 0 };
 
     const flatStyle = StyleSheet.flatten(styleObj);
@@ -110,7 +110,7 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
     }
 
     return { horizontal, vertical };
-  };
+  }, []);
 
   // Update padding values when style changes when component style is changed
   useEffect(() => {
@@ -123,7 +123,7 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
     ) {
       setComponentPadding(newPadding);
     }
-  }, [style, componentPadding.horizontal, componentPadding.vertical]);
+  }, [style, componentPadding.horizontal, componentPadding.vertical, extractPadding]);
 
   const updateVisibleItems = () => {
     if (!virtualization) return;
