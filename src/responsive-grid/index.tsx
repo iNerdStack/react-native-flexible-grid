@@ -14,6 +14,23 @@ import { calcResponsiveGrid } from './calc-responsive-grid';
 import useThrottle from '../hooks/use-throttle';
 import { renderPropComponent } from '../libs/render-prop-component';
 
+// Memoized grid item component to prevent unnecessary re-renders
+const MemoizedGridItem = React.memo<{
+  item: TileItem;
+  index: number;
+  itemContainerStyle: any;
+  renderItem: (props: { item: TileItem; index: number }) => React.ReactElement;
+  keyExtractor: (item: TileItem, index: number) => string;
+  getItemPositionStyle: (item: TileItem) => any;
+}>(({ item, index, itemContainerStyle, renderItem, keyExtractor, getItemPositionStyle }) => (
+  <View
+    key={keyExtractor(item, index)}
+    style={[getItemPositionStyle(item), itemContainerStyle]}
+  >
+    {renderItem({ item, index })}
+  </View>
+));
+
 export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
   data = [],
   maxItemsPerColumn = 3,
@@ -256,12 +273,15 @@ export const ResponsiveGrid: React.FC<ResponsiveGridProps> = ({
           }}
         >
           {renderedItems.map((item, index) => (
-            <View
+            <MemoizedGridItem
               key={keyExtractor(item, index)}
-              style={[getItemPositionStyle(item), itemContainerStyle]}
-            >
-              {renderItem({ item, index })}
-            </View>
+              item={item}
+              index={index}
+              itemContainerStyle={itemContainerStyle}
+              renderItem={renderItem}
+              keyExtractor={keyExtractor}
+              getItemPositionStyle={getItemPositionStyle}
+            />
           ))}
         </View>
 

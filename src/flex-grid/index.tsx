@@ -9,6 +9,32 @@ import { calcFlexGrid } from './calc-flex-grid';
 import useThrottle from '../hooks/use-throttle';
 import { renderPropComponent } from '../libs/render-prop-component';
 
+// Memoized grid item component to prevent unnecessary re-renders
+const MemoizedGridItem = React.memo<{
+  item: FlexGridTile;
+  index: number;
+  itemSizeUnit: number;
+  itemContainerStyle: any;
+  renderItem: (props: { item: FlexGridTile; index: number }) => React.ReactElement;
+  keyExtractor: (item: FlexGridTile, index: number) => string;
+}>(({ item, index, itemSizeUnit, itemContainerStyle, renderItem, keyExtractor }) => (
+  <View
+    key={keyExtractor(item, index)}
+    style={[
+      {
+        position: 'absolute',
+        top: item.top,
+        left: item.left,
+        width: (item.widthRatio || 1) * itemSizeUnit,
+        height: (item.heightRatio || 1) * itemSizeUnit,
+      },
+      itemContainerStyle,
+    ]}
+  >
+    {renderItem({ item, index })}
+  </View>
+));
+
 export const FlexGrid: React.FC<FlexGridProps> = ({
   data = [],
   virtualization = true,
@@ -201,21 +227,15 @@ export const FlexGrid: React.FC<FlexGridProps> = ({
             }}
           >
             {renderedList.map((item, index) => (
-              <View
+              <MemoizedGridItem
                 key={keyExtractor(item, index)}
-                style={[
-                  {
-                    position: 'absolute',
-                    top: item.top,
-                    left: item.left,
-                    width: (item.widthRatio || 1) * itemSizeUnit,
-                    height: (item.heightRatio || 1) * itemSizeUnit,
-                  },
-                  itemContainerStyle,
-                ]}
-              >
-                {renderItem({ item, index })}
-              </View>
+                item={item}
+                index={index}
+                itemSizeUnit={itemSizeUnit}
+                itemContainerStyle={itemContainerStyle}
+                renderItem={renderItem}
+                keyExtractor={keyExtractor}
+              />
             ))}
           </View>
 
