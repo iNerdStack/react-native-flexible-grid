@@ -85,6 +85,13 @@ export interface ResponsiveGridProps {
    * @default ltr
    */
   direction?: 'rtl' | 'ltr';
+
+  /**
+   * When true, off-screen child views (whose overflow value is hidden) are automatically removed from the native view hierarchy.
+   * This can improve performance for long lists, especially on Android when rendering remote images.
+   * @default true
+   */
+  removeClippedSubviews?: boolean;
 }
 
 export interface TileItem {
