@@ -529,6 +529,14 @@ A lower value results in more frequent updates, offering smoother visual updates
   <td>Accepts a React component or element that will be rendered at the bottom of the grid, after all the grid items have been displayed. Suitable for load more buttons, indicator or component</td>
 </tr>
 
+<tr>
+  <td><code>removeClippedSubviews</code></td>
+  <td><code>boolean</code></td>
+  <td><code>true</code></td>
+  <td><code>false</code></td>
+  <td>When true, off-screen child views are automatically removed from the native view hierarchy to improve performance, especially for long lists on Android. This optimization reduces memory usage and improves scrolling performance when rendering remote images.</td>
+</tr>
+
   </tbody>
 </table>
 
